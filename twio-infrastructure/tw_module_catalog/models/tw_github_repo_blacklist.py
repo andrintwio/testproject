@@ -17,6 +17,9 @@ class TWGithubRepoBlacklist(models.Model):
     def action_remove_blacklisted_repo(self):
         for rec in self:
             modules = self.env['tw.module.catalog'].search([('tw_repo_name', '=', rec.name)])
+            repos = self.env['tw.github.repo'].search([('name', '=', rec.name)])
             if modules:
                 modules.unlink()
                 rec.tw_blacklisted_repo_removed = True
+            if repos:
+                repos.unlink()
