@@ -16,7 +16,7 @@ class TWModuleDependencyTag(models.Model):
         tag_ids = []
         for name in depends_list:
             name = str(name).strip()
-            if not name:
+            if not name or name == '':
                 continue
                 
             # Odoo optimization: search for existing tag
