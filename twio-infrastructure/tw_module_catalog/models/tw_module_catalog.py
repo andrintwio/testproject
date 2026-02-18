@@ -23,9 +23,9 @@ class TWModuleCatalog(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'tw_name'
     
-    tw_technical_name = fields.Char(string='Technical Name', required=True, readonly=True)
+    tw_technical_name = fields.Char(string='Technical Name', required=True, readonly=True, index=True)
     tw_name = fields.Char(string='Name', required=True)
-    tw_repo_name = fields.Char(string='Repository Name', required=True, index=True, readonly=True)
+    tw_repo_name = fields.Char(string='Repository Name', required=True, index=True, readonly=True, index=True)
     tw_version = fields.Char(string='Version', required=True, readonly=True)
     tw_summary = fields.Text(string='Summary', readonly=True)
     tw_depends = fields.Char(string='Dependencies', readonly=True) 
@@ -263,9 +263,25 @@ class TWModuleCatalog(models.Model):
         BATCH_LIMIT = 40
         _logger.info("WORKER_CRON Started. Batch Limit: %s", BATCH_LIMIT)
         g = self._get_github_client()
+        if not g:
+            return
         # Process 40 modules at a time (Safe for 3-minute timeout)
         tasks = self.env['tw.module.sync.queue'].sudo().search([('state', '=', 'pending')], limit=BATCH_LIMIT)
         _logger.info("WORKER_CRON found %d pending tasks.", len(tasks))
+
+        # Prefetch existing modules to avoid 40 separate searches
+        # Get all potential technical names in one go
+        tech_names = tasks.mapped('tw_technical_name')
+        repo_names = tasks.mapped('tw_repo_name')
+
+        # 2. Fetch only the modules that match THESE names AND THESE repos
+        existing_recs = self.env['tw.module.catalog'].sudo().search([
+            ('tw_technical_name', 'in', tech_names),
+            ('tw_repo_name', 'in', repo_names)
+        ])
+        # Create a mapping dictionary for O(1) lookup
+        # Key: (repo, tech_name) -> Value: record
+        existing_map = {(r.tw_repo_name, r.tw_technical_name): r for r in existing_recs}
             
         for task in tasks:
             try:
@@ -283,10 +299,8 @@ class TWModuleCatalog(models.Model):
                 content = self._fetch_module_content(repo, task.tw_module_path, shas, {})
                 
                 if content:
-                    existing = self.env['tw.module.catalog'].search([
-                        ('tw_repo_name', '=', task.tw_repo_name),
-                        ('tw_technical_name', '=', task.tw_technical_name)
-                    ], limit=1)
+                    # Use the pre-fetched record if it exists
+                    existing = existing_map.get((task.tw_repo_name, task.tw_technical_name), self.env['tw.module.catalog'])
 
                     self._process_found_module(
                         repo=repo, path=task.tw_module_path, 
