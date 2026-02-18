@@ -61,7 +61,7 @@ class TWModuleSyncQueue(models.Model):
             'tw_readme_sha': all_shas.get('readme_sha'),
             'tw_readme_path': all_shas.get('readme_path'),
             'tw_index_sha': all_shas.get('index_sha'),
-            'tw_module_sha': module_sha,
+            'tw_module_sha': all_shas.get('module_sha'),
             'state': 'pending', # Reset to pending if we are updating
         }
 
