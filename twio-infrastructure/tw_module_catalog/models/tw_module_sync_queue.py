@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class TWModuleSyncQueue(models.Model):
     _name = 'tw.module.sync.queue'
