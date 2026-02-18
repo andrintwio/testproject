@@ -26,10 +26,10 @@ class TestModuleCatalog(TestTwModuleCatalogCommon):
         hashes = self.catalog_model.generate_pillar_hashes(data)
         
         # Pillars are: author, website, category, summary, description
-        self.assertIn('author_hash', hashes)
-        self.assertIn('website_hash', hashes)
-        self.assertNotEqual(hashes['author_hash'], hashes['website_hash'])
+        self.assertIn('tw_hash_1', hashes)
+        self.assertIn('tw_hash_2', hashes)
+        self.assertNotEqual(hashes['tw_hash_1'], hashes['tw_hash_2'])
         
         # Check stability
         hashes_v2 = self.catalog_model.generate_pillar_hashes(data)
-        self.assertEqual(hashes['author_hash'], hashes_v2['author_hash'])
+        self.assertEqual(hashes['tw_hash_1'], hashes_v2['tw_hash_1'])

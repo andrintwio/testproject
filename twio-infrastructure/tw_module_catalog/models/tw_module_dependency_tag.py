@@ -9,17 +9,13 @@ class TWModuleDependencyTag(models.Model):
 
     @api.model
     def get_or_create_tags(self, depends_list):
-        """Standardizes and retrieves tag IDs, creating missing ones."""
         if not depends_list:
             return []
-            
+
+        clean_names = {str(n).strip() for n in depends_list if str(n).strip()}
+        
         tag_ids = []
-        for name in depends_list:
-            name = str(name).strip()
-            if not name or name == '':
-                continue
-                
-            # Odoo optimization: search for existing tag
+        for name in clean_names:
             tag = self.search([('name', '=', name)], limit=1)
             if not tag:
                 tag = self.create({
