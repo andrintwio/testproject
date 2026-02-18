@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class TWModuleDependencyTag(models.Model):
     _name = 'tw.module.dependency.tag'
@@ -29,4 +29,3 @@ class TWModuleDependencyTag(models.Model):
             tag_ids.append(tag.id)
             
         return tag_ids
-        
