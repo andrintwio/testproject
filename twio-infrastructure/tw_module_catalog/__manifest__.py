@@ -24,8 +24,4 @@
     'external_dependencies': {
         'python': ['PyGithub', 'markdown'],
     },
-
-    'installable': True,
-    'application': False,
-    'auto_install': False,
 }

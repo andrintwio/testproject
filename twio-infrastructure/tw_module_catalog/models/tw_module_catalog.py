@@ -14,7 +14,6 @@ from github import Auth
 import uuid
 from docutils.core import publish_parts
 
-# Initialize the logger
 _logger = logging.getLogger(__name__)
 
 class TWModuleCatalog(models.Model):
@@ -130,134 +129,6 @@ class TWModuleCatalog(models.Model):
             self.tw_user_used_ids = [(4, self.env.user.id)] # Add (Link)
     
 #==================== Start API Sync ====================
-    # def action_sync_github_catalog(self):
-    #     """
-    #     Orchestrates the synchronization process with GitHub in adaptive bursts.
-    #     """
-    #     start_time = time.time()
-        
-    #     # 1. Simplified Window Check (No Rescheduling to avoid RPC_ERROR)
-    #     night_sync_only = self.env['ir.config_parameter'].sudo().get_param('tw_module_catalog.night_sync', 'True').lower() == 'true'
-    #     if night_sync_only:
-    #         now_utc = datetime.datetime.now(datetime.timezone.utc)
-    #         if not (0 <= now_utc.hour < 5):
-    #             return False
-
-    #     _logger.info("Starting GitHub Module Catalog Sync Burst...")
-    #     RepoLog = self.env['tw.github.repo']
-    #     g = self._get_github_client()
-    #     if not g:
-    #         _logger.warning("Sync aborted: Missing GitHub Token.")
-    #         return False
-
-    #     org_name = 'twio-tech'
-    #     all_repos = self._get_syncable_repos(g, org_name)
-        
-    #     # State tracking for chaining
-    #     sync_threshold = fields.Datetime.now() - relativedelta(hours=12)
-    #     processed_in_this_burst = 0
-    #     burst_limit = 8
-    #     has_more = False
-
-    #     for repo in all_repos:
-    #         try:
-    #             # 2. Cooperative Multitasking: Graceful exit before Odoo timeout
-    #             if time.time() - start_time > 600: # 10 minutes
-    #                 _logger.info("Sync time limit reached. Chaining next run.")
-    #                 has_more = True
-    #                 break
-
-    #             if processed_in_this_burst >= burst_limit:
-    #                 _logger.info("Burst repository limit reached. Chaining next run.")
-    #                 has_more = True
-    #                 break
-
-    #             # Get existing repo log
-    #             repo_log = RepoLog.sudo().search([('name', '=', repo.name)], limit=1)
-                
-    #             # Check threshold
-    #             if repo_log and repo_log.tw_last_sync and repo_log.tw_last_sync > sync_threshold:
-    #                 continue
-
-    #             _logger.info("Scanning Repo for Modules: %s", repo.name)
-                
-    #             # Process the Repo
-    #             manifest_data = self._get_repo_manifest_data(repo_log, repo, sync_threshold)
-                
-    #             if manifest_data['status'] == 'error' or manifest_data['status'] == 'recently synced':
-    #                 continue
-
-    #             if manifest_data['count'] == 0:
-    #                 _logger.info("Repo %s has no modules. Skipping.", repo.name)
-    #                 log_vals = {'tw_last_sync': fields.Datetime.now(), 'tw_has_modules': False, 'tw_module_count': 0}
-    #                 if repo_log:
-    #                     repo_log.sudo().write(log_vals)
-    #                 else:
-    #                     RepoLog.sudo().create({'name': repo.name, **log_vals})
-    #                 processed_in_this_burst += 1
-    #                 self.env.cr.commit()
-    #                 continue
-
-    #             _logger.info("---Found %s manifests in repo %s---", manifest_data['count'], repo.name)
-
-    #             # Process each module
-    #             for manifest_path in manifest_data['paths']:
-    #                 if manifest_path == '__manifest__.py':
-    #                     module_path = ''
-    #                 else:
-    #                     module_path = manifest_path.rsplit('/__manifest__.py', 1)[0]
-
-    #                 if '/' in module_path:
-    #                     tech_name = module_path.split('/')[-1]
-    #                 elif module_path:
-    #                     tech_name = module_path
-    #                 else:
-    #                     tech_name = repo.name
-
-    #                 # Get Module SHA and record
-    #                 all_shas = self._get_module_shas(module_path, manifest_data['tree_map'])
-    #                 module = self.env['tw.module.catalog'].search([
-    #                     ('tw_repo_name', '=', repo.name), 
-    #                     ('tw_technical_name', '=', tech_name)
-    #                 ], limit=1)
-
-    #                 if module and module.tw_module_sha == all_shas['module_sha']:
-    #                     continue
-
-    #                 module_content_raw = self._fetch_module_content(repo, module_path, all_shas, manifest_data['tree_map'])
-    #                 if not module_content_raw:
-    #                     continue
-
-    #                 self._process_found_module(
-    #                     repo=repo, path=module_path, manifest_raw=module_content_raw['manifest_raw'], 
-    #                     index_raw=module_content_raw['index_raw'], readme_html=module_content_raw['readme_html'],
-    #                     module_sha=all_shas['module_sha'], tech_name=tech_name, existing_module=module
-    #                 )
-
-    #             # Finalize repo sync
-    #             log_vals = {'tw_last_sync': fields.Datetime.now(), 'tw_has_modules': True, 'tw_module_count': manifest_data['count']}
-    #             if repo_log:
-    #                 repo_log.sudo().write(log_vals)
-    #             else:
-    #                 RepoLog.sudo().create({'name': repo.name, **log_vals})
-
-    #             _logger.info("Sync Complete for %s.", repo.name)
-    #             processed_in_this_burst += 1
-    #             self.env.cr.commit()
-
-    #         except Exception as e:
-    #             self.env.cr.rollback()
-    #             _logger.error("Failed to sync repository %s: %s", repo.name, str(e))
-    #             continue
-
-    #     # 3. Adaptive Chaining: Trigger next run if needed
-    #     if has_more:
-    #         cron = self.env.ref('tw_module_catalog.tw_module_catalog_sync_github_cron', raise_if_not_found=False)
-    #         if cron:
-    #             _logger.info("Manually triggering follow-up sync burst via _trigger().")
-    #             cron._trigger()
-        
-    #     return True
 
     def action_process_queue_cron(self):
         BATCH_LIMIT = 40
@@ -265,30 +136,21 @@ class TWModuleCatalog(models.Model):
         g = self._get_github_client()
         if not g:
             return
-        # Process 40 modules at a time (Safe for 3-minute timeout)
+        
         tasks = self.env['tw.module.sync.queue'].sudo().search([('state', '=', 'pending')], limit=BATCH_LIMIT)
-        _logger.info("WORKER_CRON found %d pending tasks.", len(tasks))
 
-        # Prefetch existing modules to avoid 40 separate searches
-        # Get all potential technical names in one go
+        # Prefetch existing modules 
         tech_names = tasks.mapped('tw_technical_name')
         repo_names = tasks.mapped('tw_repo_name')
-
-        # 2. Fetch only the modules that match THESE names AND THESE repos
         existing_recs = self.env['tw.module.catalog'].sudo().search([
             ('tw_technical_name', 'in', tech_names),
             ('tw_repo_name', 'in', repo_names)
         ])
-        # Create a mapping dictionary for O(1) lookup
-        # Key: (repo, tech_name) -> Value: record
         existing_map = {(r.tw_repo_name, r.tw_technical_name): r for r in existing_recs}
             
         for task in tasks:
             try:
-                _logger.info("Starting GitHub Module Catalog Sync for Module %s in repo %s...", task.tw_technical_name, task.tw_repo_name)
                 repo = g.get_repo(f"twio-tech/{task.tw_repo_name}")
-                
-                # Reuse your existing efficient blob fetcher
                 shas = {
                     'manifest_sha': task.tw_manifest_sha,
                     'readme_sha': task.tw_readme_sha,
@@ -299,7 +161,7 @@ class TWModuleCatalog(models.Model):
                 content = self._fetch_module_content(repo, task.tw_module_path, shas, {})
                 
                 if content:
-                    # Use the pre-fetched record if it exists
+                    # Use pre-fetched record
                     existing = existing_map.get((task.tw_repo_name, task.tw_technical_name), self.env['tw.module.catalog'])
 
                     self._process_found_module(
@@ -319,27 +181,13 @@ class TWModuleCatalog(models.Model):
                 self.env.cr.rollback()
                 task.write({'state': 'error', 'error_log': str(e)})
                 self.env.cr.commit()
-        
-        # RETRIGGER CONDITION:
-        # If we found exactly 40, there are likely more. Stay at 1 minute.
-        # If we found < 40, we just finished the pile. Sleep now.
+
         remaining_count = self.env['tw.module.sync.queue'].search_count([('state', '=', 'pending')])
         cron = self.env.ref('tw_module_catalog.ir_cron_process_sync_queue', raise_if_not_found=False)
         if cron:
             if remaining_count > 0:
                 cron.sudo()._trigger()
         return True
-
-    # def _update_worker_cron_interval(self, interval, unit):
-    #         """ Helper to modify the cron schedule dynamically """
-
-    #         cron = self.env.ref('tw_module_catalog.ir_cron_process_sync_queue', raise_if_not_found=False)
-    #         if cron and (cron.interval_number != interval or cron.interval_type != unit):
-    #             cron.sudo().write({
-    #                 'interval_number': interval,
-    #                 'interval_type': unit
-    #             })
-
 
     def _get_github_client(self):
         """Returns an authenticated Github client."""
@@ -349,89 +197,9 @@ class TWModuleCatalog(models.Model):
             return False
         auth = Auth.Token(token)
         return Github(auth=auth)
-
-    # def _get_syncable_repos(self, github_client, org_name):
-    #     """Returns filtered repos from the organization."""
-    #     exclusions = self.env['tw.github.repo.blacklist'].sudo().search([('active', '=', True)]) # Get list of excluded repos
-    #     exclude_list = exclusions.mapped('name')
-    #     system_defaults = ['odoo', 'enterprise', 'design-themes']
-        
-    #     try:
-    #         org = github_client.get_organization(org_name)
-    #         all_repos = [
-    #             r for r in org.get_repos(sort='pushed', direction='desc') # Sort by pushed date, descending
-    #             if not r.fork 
-    #             and r.name not in exclude_list 
-    #             and r.name not in system_defaults
-    #         ]
-    #         _logger.info("Found %s repositories to scan.", len(all_repos))
-    #         return all_repos
-    #     except Exception as e:
-    #         _logger.error("Failed to connect to GitHub Organization: %s", str(e))
-    #         return []
-
-    # def _get_repo_manifest_data(self, repo_log, repo, sync_threshold):
-
-    #     """Orchestrates the sync for a single repo."""
-
-    #     if repo_log and repo_log.tw_last_sync and repo_log.tw_last_sync > sync_threshold:
-    #         return {'status': 'recently synced'}
-        
-    #     _logger.info("Scanning Repo for Modules: %s", repo.name) #Non essential
-
-    #     try:
-    #         # Use Git Tree API (Recursive) - Much faster than search_code and no rate limiting issues
-    #         # 1 API call per repo vs 1 call per 100 files + sleeps
-    #             tree = repo.get_git_tree(repo.default_branch, recursive=True)
-                
-    #             # Build Map: Path -> SHA
-    #             # We need this to fetch the BLOBS directly via SHA (super fast) instead of Path
-    #             tree_map = {item.path: item.sha for item in tree.tree}
-                
-    #             # Identify Manifests
-    #             manifest_paths = [p for p in tree_map.keys() if p.endswith('/__manifest__.py') or p == '__manifest__.py']
-    #             return {'status': 'success', 'paths': manifest_paths, 'tree_map': tree_map, 'count': len(manifest_paths)}
-    #     except Exception as e:
-    #         _logger.error("Failed to get manifests from repo %s: %s", repo.name, str(e))
-    #         return {'status': 'error', 'paths': [], 'tree_map': {}, 'count': 0}
-                
-    # def _get_module_shas(self, module_path, tree_map):
-    #     # Initialize defaults
-    #     readme_sha = False
-    #     readme_path = False
-        
-    #     prefix = f"{module_path}/" if module_path else ""
-    #     manifest_path = f"{prefix}__manifest__.py"
-    #     md_path = f"{prefix}README.md"
-    #     rst_path = f"{prefix}README.rst"
-    #     index_path = f"{prefix}static/description/index.html"
-
-    #     # Check for Readme
-    #     if tree_map.get(md_path):
-    #         readme_path = md_path
-    #         readme_sha = tree_map[md_path]
-    #     elif tree_map.get(rst_path):
-    #         readme_path = rst_path
-    #         readme_sha = tree_map[rst_path]
-
-    #     manifest_sha = tree_map.get(manifest_path)
-    #     index_sha = tree_map.get(index_path, False)
-        
-    #     # Create the composite SHA for change detection
-    #     module_sha = f"{manifest_sha}|{readme_sha}|{index_sha}"
-
-    #     return {
-    #         'module_sha': module_sha, 
-    #         'manifest_sha': manifest_sha, 
-    #         'readme_sha': readme_sha, 
-    #         'index_sha': index_sha, 
-    #         'readme_path': readme_path
-    #     }
-
         
     def _fetch_module_content(self, repo, module_path, all_shas, tree_map):
         """Fetches raw content for manifest/readme/index."""
-
         results = {'manifest_raw': False, 'readme_html': False, 'index_raw': False}
         try:
             # Fetch manifest.py
@@ -444,7 +212,7 @@ class TWModuleCatalog(models.Model):
                 blob = repo.get_git_blob(all_shas['readme_sha'])
                 raw = base64.b64decode(blob.content).decode('utf-8')
 
-                # Determine if the readme is markdown or rst
+                # Determine if markdown or rst
                 if all_shas.get('readme_path', '').endswith('.md'):
                     results['readme_html'] = markdown.markdown(raw, extensions=['extra'])
                 else:
@@ -457,12 +225,12 @@ class TWModuleCatalog(models.Model):
 
         except Exception as e:
             _logger.error("Error fetching content for %s: %s", module_path, e)
-            return False # Signal a total failure   
+            return False  
         
     def _process_found_module(self, repo, path, manifest_raw, index_raw=False, readme_html=False, module_sha=None, tech_name=None, existing_module=None):
         """
         Processes a single Odoo module found in a repository.
-        Parses the manifest, generates hashes, identifies clusters, 
+        Parses the manifest, generates hashes, identifies clusters, adds tags, 
         and handles record create/update.
         """
         try:
@@ -471,10 +239,6 @@ class TWModuleCatalog(models.Model):
             if not data:
                 _logger.warning("Skipping module %s in %s: Empty or invalid manifest.", tech_name, repo.name)
                 return
-
-            # Create dependency tags
-            depends_list = data.get('depends', [])
-            tag_ids = self._get_or_create_dependency_tags(depends_list)
 
             # Generate hashes
             hashes = self.generate_pillar_hashes(data)
@@ -492,6 +256,10 @@ class TWModuleCatalog(models.Model):
                 cluster_hash = existing_cluster_hash
             else:
                 cluster_hash = str(uuid.uuid4())
+
+            # Create dependency tags
+            depends_list = data.get('depends', [])
+            tag_ids = self.env['tw.module.dependency.tag'].get_or_create_tags(depends_list)
 
             # Prepare values
             vals = {
@@ -527,9 +295,6 @@ class TWModuleCatalog(models.Model):
         except Exception as e:
             # Log the error but don't re-raise it, allowing the main loop to continue
             _logger.error("Error processing module %s in repo %s: %s", tech_name, repo.name, str(e))
-
-    
-# ===================== Helper Functions ===================== 
 
     def _parse_manifest(self, content):
         """Attempts to safely literal_eval the Odoo manifest dictionary from a string."""
@@ -597,23 +362,3 @@ class TWModuleCatalog(models.Model):
             return res[0]
         else:
             return False
-
-    def _get_or_create_dependency_tags(self, depends_list):
-        TagModel = self.env['tw.module.dependency.tag'].sudo()
-        tag_ids = []
-        
-        for name in depends_list:
-            name = str(name).strip()
-            if not name:
-                continue
-                
-            # Check if exists, or create on the fly
-            tag = TagModel.search([('name', '=', name)], limit=1)
-            if not tag:
-                tag = TagModel.create({
-                    'name': name,
-                    'color': (len(name) % 11) + 1 # Randomish color based on name length
-                })
-            tag_ids.append(tag.id)
-            
-        return tag_ids

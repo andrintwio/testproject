@@ -6,8 +6,6 @@ from github import Auth
 from github import Github
 import datetime
 
-
-
 _logger = logging.getLogger(__name__)
 
 class TWGithubRepo(models.Model):

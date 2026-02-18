@@ -13,7 +13,7 @@ class TWModuleSyncQueue(models.Model):
     tw_readme_sha = fields.Char()
     tw_readme_path = fields.Char()
     tw_index_sha = fields.Char()
-    tw_module_sha = fields.Char() # The composite SHA you already calculate
+    tw_module_sha = fields.Char()
 
     state = fields.Selection([
         ('pending', 'Pending'),
