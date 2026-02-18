@@ -117,7 +117,7 @@ class TWGithubRepo(models.Model):
             _logger.warning("worker_cron TRIGGERED (ID: %s) via method_direct_trigger()", worker_cron.id)
             try:
                 # Force synchronous execution to ensure it runs immediately
-                worker_cron.method_direct_trigger()
+                worker_cron._trigger()
             except UserError:
                 _logger.info("Worker cron is already running, skipping trigger.")
             except Exception as e:

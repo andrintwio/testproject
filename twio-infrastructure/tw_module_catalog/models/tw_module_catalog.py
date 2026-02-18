@@ -264,7 +264,7 @@ class TWModuleCatalog(models.Model):
         _logger.info("WORKER_CRON Started. Batch Limit: %s", BATCH_LIMIT)
         g = self._get_github_client()
         # Process 40 modules at a time (Safe for 3-minute timeout)
-        tasks = self.env['tw.module.sync.queue'].search([('state', '=', 'pending')], limit=BATCH_LIMIT)
+        tasks = self.env['tw.module.sync.queue'].sudo().search([('state', '=', 'pending')], limit=BATCH_LIMIT)
         _logger.info("WORKER_CRON found %d pending tasks.", len(tasks))
             
         for task in tasks:
