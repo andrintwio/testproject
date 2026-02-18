@@ -25,23 +25,22 @@ class TWModuleSyncQueue(models.Model):
     @api.model
     def add_to_queue(self, repo_name, tech_name, module_path, all_shas):
         """Checks if module is in catalog or existing queue. If not add to queue."""
-        
+        module_sha = all_shas.get('module_sha')
         # Check if exact version is in catalog
         in_catalog = self.env['tw.module.catalog'].search_count([
             ('tw_repo_name', '=', repo_name),
             ('tw_technical_name', '=', tech_name),
-            ('tw_module_sha', '=', all_shas['module_sha'])
+            ('tw_module_sha', '=', module_sha)
         ])
         if in_catalog:
             return False
 
         # Check if there is already a PENDING task for this exact version
-        in_queue = self.search_count([
+        in_queue = self.search([
             ('tw_repo_name', '=', repo_name),
             ('tw_technical_name', '=', tech_name),
-            ('tw_module_sha', '=', all_shas['module_sha']),
             ('state', '=', 'pending')
-        ])
+        ], limit=1)
 
         # If it's already pending and the SHA matches, we do nothing
         if in_queue and in_queue.tw_module_sha == module_sha:
@@ -61,7 +60,7 @@ class TWModuleSyncQueue(models.Model):
             'tw_readme_sha': all_shas.get('readme_sha'),
             'tw_readme_path': all_shas.get('readme_path'),
             'tw_index_sha': all_shas.get('index_sha'),
-            'tw_module_sha': all_shas.get('module_sha'),
+            'tw_module_sha': module_sha,
             'state': 'pending', # Reset to pending if we are updating
         }
 
