@@ -1,0 +1,159 @@
+<section class="oe_container" style="font-family: 'Inter', sans-serif; color: #334155;">
+    <!-- Centered Logo at Top -->
+    <div class="oe_row oe_spaced text-center">
+        <div class="oe_span12">
+            <img src="icon.png" alt="Logo" style="max-height: 100px; width: auto; margin-bottom: 20px;">
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12" style="text-align: left !important;">
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #334155;">
+                <strong>TW Module Catalog</strong> is a powerful tool designed to centralize and manage custom Odoo modules developed within your organization. It automatically syncs with GitHub to provide a comprehensive, searchable catalog of all your internal tools.
+            </p>
+        </div>
+    </div>
+
+    <!-- What the Project Does -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">What the Module Does</h2>
+        <p>The TW Module Catalog acts as an internal "App Store" for your company's Odoo modules. It periodically scans your GitHub repositories for Odoo modules, parses their metadata (manifests, readmes, index files), and creates a rich dashboard where developers and consultants can discover existing solutions, track versions, and avoid duplicating work.</p>
+    </div>
+
+    <!-- Why the Module is Useful -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Why the Module is Useful</h2>
+        <p>This module solves several pain points in multi-repository Odoo development:</p>
+        <ul style="padding-left: 20px;">
+            <li><strong>Discoverability:</strong> Stop asking "have we built this before?". Search through all internal modules in one place.</li>
+            <li><strong>Redundancy Detection:</strong> Identify similar modules across different repositories using advanced "Cluster ID" hashing.</li>
+            <li><strong>Knowledge Sharing:</strong> Access documentation (Readmes and Index files) directly within Odoo without leaving the ERP.</li>
+            <li><strong>Usage Tracking:</strong> See which modules are popular and which users have experience with specific tools.</li>
+            <li><strong>Automation:</strong> Keeps your catalog up-to-date automatically via scheduled GitHub synchronization.</li>
+        </ul>
+    </div>
+
+    <!-- Getting Started Section -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">How Users Can Get Started</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Initial Configuration
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ol>
+                    <li>Ensure the <code>tw_infrastructure</code> module is installed.</li>
+                    <li>Go to <strong>Settings > Technical > System Parameters</strong>.</li>
+                    <li>Create or update the parameter <code>twio.github_token</code> with a valid GitHub Personal Access Token.</li>
+                </ol>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Setup Master Data
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>If there are repositories that should not be scanned (e.g., standard Odoo, themes, or archived projects):</p>
+                <ol>
+                    <li>Navigate to <strong>Infrastructure > Configuration > Repository Blacklist</strong>.</li>
+                    <li>Add the names of the repositories you want to exclude.</li>
+                </ol>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Key Workflows
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>Browsing Modules:</strong></p>
+                <ul>
+                    <li>Go to <strong>Infrastructure > All Modules</strong>.</li>
+                    <li>Use the search bar to find modules by name, technical name, or functionality.</li>
+                    <li>Group by <strong>Siblings</strong> to see variations of the same module across different repositories.</li>
+                </ul>
+                <p><strong>Marking Usage:</strong></p>
+                <ul>
+                    <li>Open a module record.</li>
+                    <li>Click the <strong>"I have used this module"</strong> button to let others know you have experience with it.</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <!-- Technical Details (Folded) -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Technical Details</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-code-fork" style="margin-right: 10px; color: #3b82f6;"></i> List of New Fields and Models
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>Custom Modules (<code>tw.module.catalog</code>)</strong>: Infrastructure > All Modules</p>
+                <ul>
+                    <li><strong>Technical Name:</strong> The Odoo technical folder name.</li>
+                    <li><strong>Name:</strong> The descriptive name from the manifest.</li>
+                    <li><strong>Summary / Description:</strong> Functional and technical overviews.</li>
+                    <li><strong>Version:</strong> Current version in the matched repository.</li>
+                    <li><strong>Repository Link:</strong> Direct link to the code on GitHub.</li>
+                    <li><strong>Cluster Group:</strong> Identifies identical or highly similar modules.</li>
+                    <li><strong>Usage Count:</strong> Number of users tracking their experience with this module.</li>
+                </ul>
+                <p><strong>Repository Blacklist (<code>tw.github.repo.blacklist</code>)</strong>: Infrastructure > Configuration > Repository Blacklist</p>
+                <ul>
+                    <li><strong>Name:</strong> Repository name to exclude from synchronization.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cogs" style="margin-right: 10px; color: #3b82f6;"></i> Added Actions and Buttons
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ul>
+                    <li><strong>Sync GitHub Catalog:</strong> Orchestrates the synchronization with GitHub (executed via Cron or manual developer action).</li>
+                    <li><strong>I have used this module:</strong> (Custom Module Form) Mark yourself as a user/owner of this module integration.</li>
+                    <li><strong>Remove Blacklisted Repo:</strong> (Blacklist Form) Deletes all catalog entries associated with a blacklisted repository.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cubes" style="margin-right: 10px; color: #3b82f6;"></i> Module Dependencies
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ul>
+                    <li><code>tw_infrastructure</code></li>
+                    <li><code>mail</code> (Chatter and Activity tracking)</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-info-circle" style="margin-right: 10px; color: #3b82f6;"></i> Licence Information
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                OPL-1
+            </div>
+        </details>
+    </div>
+
+    <!-- Version History -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">Version History</h2>
+        <details style="cursor: pointer; background: #ffffff; padding-left: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> 19.0.0.0.0
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                Initial release for Odoo 19.0. GitHub synchronization and module cataloging.
+            </div>
+        </details>
+    </div>
+
+    <!-- Footer -->
+    <div class="oe_row oe_spaced" style="padding-top: 40px; border-top: 1px solid #f1f5f9; text-align: left !important;">
+        <div class="oe_span6">
+            <p style="margin-bottom: 0;">Developed by <strong>twio.tech AG</strong> | <a href="https://www.twio.tech" target="_blank" style="color: #3b82f6; text-decoration: none;">www.twio.tech</a></p>
+        </div>
+    </div>
+</section>

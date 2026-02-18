@@ -1,0 +1,167 @@
+<section class="oe_container" style="font-family: 'Inter', sans-serif; color: #334155;">
+    <!-- Centered Logo at Top -->
+    <div class="oe_row oe_spaced text-center">
+        <div class="oe_span12">
+            <img src="icon.png" alt="Logo" style="max-height: 100px; width: auto; margin-bottom: 20px;">
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12" style="text-align: left !important;">
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #334155;">
+                <strong>tw_infrastructure</strong> is a base module that provides the foundation for infrastructure management in Odoo. It establishes the Infrastructure menu, security groups, and settings section that other infrastructure-related modules can extend.
+            </p>
+        </div>
+    </div>
+
+    <!-- What the Module Does -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">What the Module Does</h2>
+        <p>This module creates the infrastructure management framework in Odoo by:</p>
+        <ul style="padding-left: 20px;">
+            <li>Adding an <strong>Infrastructure</strong> menu item to the main navigation</li>
+            <li>Creating security groups for infrastructure management (Admin, Consultant, Developer)</li>
+            <li>Adding an Infrastructure section in Settings where infrastructure-related modules can add their configuration options</li>
+        </ul>
+        <p>This module serves as a base for other infrastructure modules and does not provide standalone functionality on its own.</p>
+    </div>
+
+    <!-- Why the Module is Useful -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Why the Module is Useful</h2>
+        <p>This module provides the foundation for infrastructure management by:</p>
+        <ul style="padding-left: 20px;">
+            <li><strong>Centralized Infrastructure Management:</strong> Creates a dedicated menu and settings area for all infrastructure-related tools</li>
+            <li><strong>Security Framework:</strong> Establishes security groups that can be used across infrastructure modules for consistent access control</li>
+            <li><strong>Extensibility:</strong> Allows other modules to extend the Infrastructure menu and settings without duplicating code</li>
+            <li><strong>Organization:</strong> Keeps infrastructure tools organized in one place, separate from other business applications</li>
+        </ul>
+    </div>
+
+    <!-- Getting Started Section -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">How Users Can Get Started</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Initial Configuration
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>After installing this module:</p>
+                <ol style="padding-left: 20px;">
+                    <li>The <strong>Infrastructure</strong> menu will appear in the main navigation for users with appropriate permissions</li>
+                    <li>An <strong>Infrastructure</strong> section will be added to Settings (accessible via Settings > Infrastructure)</li>
+                    <li>Security groups will be available for assignment to users:
+                        <ul style="padding-left: 20px; margin-top: 10px;">
+                            <li><strong>Infrastructure Admin:</strong> Full access to infrastructure management</li>
+                            <li><strong>Infrastructure Developer:</strong> Read and write access to infrastructure data</li>
+                            <li><strong>Infrastructure Consultant:</strong> Read-only access to infrastructure data</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Setup Master Data
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>This module does not require any master data setup. It only provides the framework for other infrastructure modules.</p>
+                <p>To use this module effectively:</p>
+                <ol style="padding-left: 20px;">
+                    <li>Assign appropriate security groups to users who need access to infrastructure features</li>
+                    <li>Install infrastructure-related modules that extend this base module</li>
+                </ol>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Key Workflows
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>This module does not provide specific workflows. It serves as a foundation for other modules that will add workflows and functionality.</p>
+                <p>Once other infrastructure modules are installed, you can:</p>
+                <ul style="padding-left: 20px;">
+                    <li>Access infrastructure features through the Infrastructure menu</li>
+                    <li>Configure infrastructure settings in Settings > Infrastructure</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    
+    <!-- Technical Details (Folded) -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Technical Details</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-code-fork" style="margin-right: 10px; color: #3b82f6;"></i> List of New Fields and Models
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>This module does not add any new models or fields that are visible to end users. It only provides:</p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Security Groups:</strong> Available in Settings > Users & Companies > Groups
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Infrastructure Admin</li>
+                            <li>Infrastructure Developer</li>
+                            <li>Infrastructure Consultant</li>
+                        </ul>
+                    </li>
+                    <li><strong>Menu Item:</strong> Infrastructure menu in main navigation</li>
+                    <li><strong>Settings Section:</strong> Infrastructure section in Settings</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cogs" style="margin-right: 10px; color: #3b82f6;"></i> Added Actions and Buttons
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>This module does not add any actions or buttons. It provides the framework for other modules to add their actions and buttons.</p>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cubes" style="margin-right: 10px; color: #3b82f6;"></i> Module Dependencies
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ul style="padding-left: 20px;">
+                    <li><strong>base</strong> - Odoo base module</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-info-circle" style="margin-right: 10px; color: #3b82f6;"></i> Licence Information
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                OPL-1
+            </div>
+        </details>
+    </div>
+
+    <!-- Version History -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">Version History</h2>
+        <details style="cursor: pointer; background: #ffffff; padding-left: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> 19.0.1.0.0
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ul style="padding-left: 20px;">
+                    <li>Initial version</li>
+                    <li>Added Infrastructure menu</li>
+                    <li>Created security groups (Admin, Developer, Consultant)</li>
+                    <li>Added Infrastructure section in Settings</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <!-- Footer -->
+    <div class="oe_row oe_spaced" style="padding-top: 40px; border-top: 1px solid #f1f5f9; text-align: left !important;">
+        <div class="oe_span6">
+            <p style="margin-bottom: 0;">Developed by <strong>twio.tech AG</strong> | <a href="https://www.twio.tech" target="_blank" style="color: #3b82f6; text-decoration: none;">www.twio.tech</a></p>
+        </div>
+    </div>
+</section>
+

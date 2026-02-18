@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Infrastructure Menu -->
+    <menuitem id="menu_infrastructure_root"
+              name="Infrastructure"
+              sequence="100"
+              web_icon="tw_infrastructure,static/description/icon.png"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
+</odoo>

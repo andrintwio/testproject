@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Server Action for Synchronize All Odoo.sh Repositories -->
+    <record id="action_synchronize_all_odoo_sh_repositories" model="ir.actions.server">
+        <field name="name">Synchronize all Odoo.sh Repositories</field>
+        <field name="model_id" ref="model_tw_odoo_sh_repository"/>
+        <field name="group_ids" eval="[(4, ref('tw_infrastructure.group_infrastructure_admin')), (4, ref('tw_infrastructure.group_infrastructure_developer'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_synchronize_all_odoo_sh_repositories()
+        </field>
+    </record>
+
+    <!-- Repository List View -->
+    <record id="view_tw_odoo_sh_repository_list" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.repository.list</field>
+        <field name="model">tw_odoo_sh.repository</field>
+        <field name="arch" type="xml">
+            <list string="Odoo.sh Repositories">
+                <header>
+                    <button name="%(tw_odoo_sh_monitoring.action_synchronize_all_odoo_sh_repositories)d" type="action" string="Synchronize Odoo.sh Repositories" display="always" groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
+                </header>
+                <field name="tw_last_update_status" string="Status" nolabel="1" width="20px" optional="show"/>
+                <field name="name"/>
+                <field name="tw_owner"/>
+                <field name="tw_odoo_branch"/>
+                <field name="tw_project_name"/>
+                <field name="tw_branch_count"/>
+                <field name="tw_last_sync"/>
+                <field name="tw_sync_status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Repository Form View -->
+    <record id="view_tw_odoo_sh_repository_form" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.repository.form</field>
+        <field name="model">tw_odoo_sh.repository</field>
+        <field name="arch" type="xml">
+            <form string="Odoo.sh Repository">
+                <header/>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="tw_repository_id" readonly="1"/>
+                            <field name="tw_owner" readonly="1"/>
+                            <field name="tw_project_name" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="tw_odoo_branch" readonly="1"/>
+                            <field name="tw_branch_count" readonly="1"/>
+                            <field name="tw_last_sync" readonly="1"/>
+                            <field name="tw_sync_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Branches" name="branches">
+                            <field name="tw_branch_ids" nolabel="1" readonly="1"/>
+                        </page>
+                        <page string="Users" name="users">
+                            <field name="tw_user_ids" nolabel="1" context="{'default_tw_repository_id': id}">
+                                <list editable="bottom">
+                                    <field name="tw_user_id" options="{'no_create': True}" readonly="id != False"/>
+                                    <field name="tw_user_name" readonly="1"/>
+                                    <field name="tw_github_user" readonly="1" force_save="1"/>
+                                    <field name="tw_permission"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Repository Search View -->
+    <record id="view_tw_odoo_sh_repository_search" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.repository.search</field>
+        <field name="model">tw_odoo_sh.repository</field>
+        <field name="arch" type="xml">
+            <search string="Odoo.sh Repositories">
+                <field name="name"/>
+                <field name="tw_owner"/>
+                <field name="tw_project_name"/>
+                <field name="tw_odoo_branch"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Repository Action -->
+    <record id="action_view_tw_odoo_sh_repository" model="ir.actions.act_window">
+        <field name="name">Odoo.sh Repositories</field>
+        <field name="res_model">tw_odoo_sh.repository</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_tw_odoo_sh_repository_list"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No Odoo.sh repositories found</p>
+            <p>
+                Click "Synchronize Odoo.sh Databases" to fetch repositories from Odoo.sh.
+            </p>
+        </field>
+    </record>
+</odoo>
+

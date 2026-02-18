@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend User Form View to add GitHub User field -->
+    <record id="view_users_form_inherit_github_user" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.github.user</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//h5[@name='h5_phone']" position="after">
+                <h5 class="d-flex align-items-baseline mb-0">
+                    <i class="fa fa-fw fa-github me-1 text-primary" title="GitHub"/>
+                    <field name="tw_github_user" placeholder="GitHub username" class="w-75"/>
+                </h5>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

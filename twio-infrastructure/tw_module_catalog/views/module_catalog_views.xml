@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tw_module_catalog_list" model="ir.ui.view">
+        <field name="name">tw.module.catalog.list</field>
+        <field name="model">tw.module.catalog</field>
+        <field name="arch" type="xml">
+            <list string="Custom Modules">
+                <field name="tw_technical_name"/>
+                <field name="tw_name"/>
+                <field name="tw_category" optional="show"/>
+                <field name="tw_version" optional="show"/>
+                <field name="tw_dependency_tag_ids" optional="show" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="tw_usage_count" string="Uses" sum="Total Usage"/>
+            </list>
+        </field>
+    </record>
+
+        <record id="view_tw_module_catalog_form" model="ir.ui.view">
+        <field name="name">tw.module.catalog.form</field>
+        <field name="model">tw.module.catalog</field>
+        <field name="arch" type="xml">
+            <form string="Custom Module">
+                <header>
+                    <button name="action_toggle_usage" 
+                            type="object" 
+                            class="oe_highlight" 
+                            invisible="tw_i_have_used_this"
+                            string="I have used this module" 
+                            icon="fa-thumbs-o-up"/>
+                    
+                    <button name="action_toggle_usage" 
+                            type="object" 
+                            class="btn-secondary" 
+                            invisible="not tw_i_have_used_this"
+                            string="You used this" 
+                            icon="fa-check-circle"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <div class="oe_stat_button" icon="fa-users">
+                            <field name="tw_usage_count" widget="statinfo" string="Total Uses"/>
+                        </div>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="tw_name" placeholder="e.g. Sales Jewelry Extension"/></h1>
+                    </div>
+                    <group>
+                        <group name="general" string="General">
+                            <field name="tw_technical_name" placeholder="e.g. sales_jewelry_extension"/>
+                            <field name="tw_repo_name" placeholder="e.g. Sales Jewelry Extension"/>
+                            <field name="tw_summary" placeholder="Module summary..."/>
+                            <field name="tw_description" placeholder="Full technical description..."/>
+                        </group>
+                        <group name="technical_details" string="Metadata">
+                            <field name="tw_category"/>
+                            <field name="tw_dependency_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="tw_version"/>
+                            <field name="tw_repo_link" widget="url"/>
+                            <field name="tw_author"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Related Modules" name="related_modules">
+                            <field name="tw_sibling_ids">
+                            <list string="Related Modules">
+                                <field name="tw_technical_name"/>
+                                <field name="tw_name"/>
+                                <field name="tw_version"/>
+                                <field name="tw_repo_name"/>
+                            </list>
+                            </field>
+                        </page>
+                        <page string="Readme" name="readme">
+                            <field name="tw_readme" placeholder="Readme..."/>
+                        </page>
+                        <page string="HTML" name="html">
+                            <field name="tw_description_html" placeholder="HTML..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tw_module_catalog_search" model="ir.ui.view">
+        <field name="name">tw.module.catalog.search</field>
+        <field name="model">tw.module.catalog</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tw_name" string="Global Search" 
+                   filter_domain="['|', '|', '|', '|', '|', '|', '|',
+                                   ('tw_name', 'ilike', self), 
+                                   ('tw_technical_name', 'ilike', self), 
+                                   ('tw_summary', 'ilike', self), 
+                                   ('tw_description', 'ilike', self), 
+                                   ('tw_readme', 'ilike', self), 
+                                   ('tw_description_html', 'ilike', self),
+                                   ('tw_category', 'ilike', self),
+                                   ('tw_dependency_tag_ids', 'ilike', self)]"/>
+                <separator/>
+                <field name="tw_name" string="Module" filter_domain="['|', '|', ('tw_name', 'ilike', self), ('tw_technical_name', 'ilike', self), ('tw_summary', 'ilike', self)]"/>
+                <field name="tw_repo_name"/>
+                <separator/>
+                <filter string="Has Siblings" name="filter_has_siblings" domain="[('tw_has_siblings', '=', True)]"/>
+                <filter string="My Used Modules" name="my_used" domain="[('tw_user_used_ids', 'in', [uid])]"/>
+                <filter string="Most Popular" name="popular" domain="[('tw_usage_count', '>', 0)]"/>
+                <field name="tw_author" string="Author" filter_domain="[('tw_author', 'ilike', self)]"/>
+                <separator/>
+
+                <group>
+                    <filter string="Repository" name="group_repo" context="{'group_by': 'tw_repo_name'}"/>
+                    <filter string="Siblings" name="group_by_cluster" context="{'group_by': 'tw_cluster_label'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tw_module_catalog" model="ir.actions.act_window">
+        <field name="name">Custom Modules</field>
+        <field name="res_model">tw.module.catalog</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

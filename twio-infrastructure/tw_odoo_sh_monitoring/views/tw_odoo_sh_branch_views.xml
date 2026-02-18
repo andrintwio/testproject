@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Branch List View -->
+    <record id="view_tw_odoo_sh_branch_list" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.branch.list</field>
+        <field name="model">tw_odoo_sh.branch</field>
+        <field name="arch" type="xml">
+            <list string="Odoo.sh Branches" default_order="tw_last_build_date desc" editable="bottom">
+                <field name="tw_last_update_status" string="Status" nolabel="1" width="20px"/>
+                <field name="name" readonly="1"/>
+                <field name="tw_repository_id" readonly="1"/>
+                <field name="tw_stage" readonly="1"/>
+                <field name="tw_block_user_id" string="Blocked By"/>
+                <field name="tw_blocked_until" string="Blocked Until"/>
+                <field name="tw_last_build_status" readonly="1"/>
+                <field name="tw_last_build_date" readonly="1"/>
+                <field name="tw_last_update" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Branch Form View -->
+    <record id="view_tw_odoo_sh_branch_form" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.branch.form</field>
+        <field name="model">tw_odoo_sh.branch</field>
+        <field name="arch" type="xml">
+            <form string="Odoo.sh Branch">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1" />
+                            <field name="tw_branch_id" readonly="1" />
+                            <field name="tw_repository_id" options="{'no_create': True}" readonly="1"/>
+                            <field name="tw_stage" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="tw_block_user_id" string="Blocked By" options="{'no_create': True}"/>
+                            <field name="tw_block_date" string="Block Date"/>
+                            <field name="tw_blocked_until" string="Blocked Until"/>
+                            <field name="tw_last_build_id" readonly="1" />
+                            <field name="tw_last_build_status" readonly="1" />
+                            <field name="tw_last_build_result" readonly="1" />
+                            <field name="tw_tracking_count" readonly="1" />
+                            <field name="tw_last_update" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="tw_last_build_commit_author" readonly="1"  />
+                        <field name="tw_last_build_date" readonly="1" />
+                        <field name="tw_last_build_commit_msg" readonly="1" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Branch Search View -->
+    <record id="view_tw_odoo_sh_branch_search" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.branch.search</field>
+        <field name="model">tw_odoo_sh.branch</field>
+        <field name="arch" type="xml">
+            <search string="Odoo.sh Branches">
+                <field name="name"/>
+                <field name="tw_repository_id"/>
+                <field name="tw_stage"/>
+                <field name="tw_last_build_status"/>
+                <filter string="Success" name="success" domain="[('tw_last_build_status', '=', 'success')]"/>
+                <filter string="Failed" name="failed" domain="[('tw_last_build_status', '=', 'failed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Branch Action -->
+    <record id="action_view_tw_odoo_sh_branch" model="ir.actions.act_window">
+        <field name="name">Odoo.sh Branches</field>
+        <field name="res_model">tw_odoo_sh.branch</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_tw_odoo_sh_branch_list"/>
+        <field name="context">{'group_by': 'tw_repository_id'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Odoo.sh branches found
+            </p>
+            <p>
+                Branches are automatically synchronized when you sync repositories.
+            </p>
+        </field>
+    </record>
+</odoo>
+

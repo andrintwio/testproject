@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menuitem for the module catalog list view-->
+    <menuitem id="menu_tw_module_catalog_list" 
+              name="All Modules" 
+              parent="tw_infrastructure.menu_infrastructure_root" 
+              action="action_tw_module_catalog" 
+              sequence="40"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
+
+    <!-- Menuitem for the module catalog config view-->
+    <menuitem id="menu_tw_module_catalog_config" 
+              name="Configuration" 
+              parent="tw_infrastructure.menu_infrastructure_root" 
+              sequence="50"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
+
+    <!-- Menuitem for the module catalog blacklist view-->
+    <menuitem id="menu_tw_module_catalog_blacklist" 
+              name="Repository Blacklist" 
+              parent="menu_tw_module_catalog_config" 
+              action="action_tw_github_repo_blacklist" 
+              sequence="10"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
+</odoo>

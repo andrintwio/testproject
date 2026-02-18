@@ -1,0 +1,329 @@
+<section class="oe_container" style="font-family: 'Inter', sans-serif; color: #334155;">
+    <!-- Centered Logo at Top -->
+    <div class="oe_row oe_spaced text-center">
+        <div class="oe_span12">
+            <img src="icon.png" alt="Logo" style="max-height: 100px; width: auto; margin-bottom: 20px;">
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12" style="text-align: left !important;">
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #334155;">
+                <strong>Odoo.sh Monitoring</strong> is a comprehensive module that monitors and manages Odoo.sh repositories, branches, and user access. It automatically synchronizes data from Odoo.sh, tracks build statuses, manages repository users, and provides notifications for branch changes.
+            </p>
+        </div>
+    </div>
+
+    <!-- What the Module Does -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">What the Module Does</h2>
+        <p>This module provides comprehensive monitoring and management of Odoo.sh infrastructure:</p>
+        <ul style="padding-left: 20px;">
+            <li><strong>Repository Monitoring:</strong> Tracks all Odoo.sh repositories, their branches, and build statuses</li>
+            <li><strong>Automatic Synchronization:</strong> Hourly cron job automatically syncs repository and branch data from Odoo.sh</li>
+            <li><strong>Branch Management:</strong> Monitors branch build statuses with visual indicators (🟢 success, 🟡 warning, 🔴 failed, ⚪ no build)</li>
+            <li><strong>User Access Management:</strong> Tracks and manages repository users with their permissions (Admin, Developer, Tester)</li>
+            <li><strong>Branch Blocking:</strong> Allows blocking branches for specific users with automatic notifications when changes occur</li>
+            <li><strong>Integration:</strong> Links Odoo users and employees with GitHub users and repository access</li>
+        </ul>
+    </div>
+
+    <!-- Why the Module is Useful -->
+    <div class="oe_row oe_spaced" style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Why the Module is Useful</h2>
+        <p>This module provides significant value for managing Odoo.sh infrastructure:</p>
+        <ul style="padding-left: 20px;">
+            <li><strong>Centralized Monitoring:</strong> View all repositories and branches in one place without switching to Odoo.sh interface</li>
+            <li><strong>Real-time Status:</strong> Get immediate visibility into build statuses with color-coded indicators</li>
+            <li><strong>Automated Sync:</strong> No manual data entry - repositories and branches are automatically synchronized hourly</li>
+            <li><strong>User Management:</strong> Easily manage repository access and permissions directly from Odoo</li>
+            <li><strong>Change Notifications:</strong> Receive automatic email notifications when blocked branches are updated</li>
+            <li><strong>Employee Integration:</strong> Link repository access to employees for better visibility of who has access to what</li>
+            <li><strong>Historical Tracking:</strong> Track build history, commit messages, and pusher information for each branch</li>
+        </ul>
+    </div>
+
+    <!-- Getting Started Section -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">How Users Can Get Started</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Initial Configuration
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>Before using the module, you need to configure Odoo.sh connection settings:</p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Settings > Infrastructure > Odoo.sh Monitoring</strong></li>
+                    <li>Enter your <strong>Odoo.sh Session ID</strong>:
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Log in to Odoo.sh (https://www.odoo.sh)</li>
+                            <li>Open your browser's developer tools (F12)</li>
+                            <li>Go to Application/Storage > Cookies</li>
+                            <li>Copy the value of the <code>session_id</code> cookie</li>
+                            <li>Paste it into the Session ID field</li>
+                        </ul>
+                    </li>
+                    <li>Enter your <strong>Default Project ID</strong> (default: 359937)</li>
+                    <li>Click <strong>Save</strong></li>
+                </ol>
+                <p><strong>Note:</strong> The Session ID may expire periodically. If synchronization fails, update the Session ID.</p>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Setup Master Data
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>1. Synchronize Repositories:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Infrastructure > Odoo.sh Repositories</strong></li>
+                    <li>Click the <strong>"Synchronize Odoo.sh Repositories"</strong> button</li>
+                    <li>Wait for the synchronization to complete (this may take a few minutes)</li>
+                    <li>All repositories, branches, and users will be automatically imported</li>
+                </ol>
+                <p><strong>2. Link Users to GitHub:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Settings > Users & Companies > Users</strong></li>
+                    <li>Open a user's form</li>
+                    <li>Enter the user's <strong>GitHub User</strong> name in the GitHub field</li>
+                    <li>Save the user</li>
+                </ol>
+                <p><strong>3. Assign Security Groups:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Settings > Users & Companies > Groups</strong></li>
+                    <li>Assign appropriate groups to users:
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li><strong>Infrastructure Admin:</strong> Full access (can delete repositories, manage all settings)</li>
+                            <li><strong>Infrastructure Developer:</strong> Can view and edit branches, manage users</li>
+                            <li><strong>Infrastructure Consultant:</strong> Read-only access</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </details>
+        <details style="cursor: pointer; background: #ffffff; padding: 5px; margin-left: 15px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> Key Workflows
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>1. Viewing Repository Status:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Infrastructure > Odoo.sh Repositories</strong></li>
+                    <li>View the status column (🟢/🟡/🔴/⚪) to see overall repository health</li>
+                    <li>Click on a repository to see details, branches, and users</li>
+                </ol>
+                <p><strong>2. Monitoring Branches:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Infrastructure > Odoo.sh Branches</strong></li>
+                    <li>View all branches grouped by repository</li>
+                    <li>Check the status column for build status</li>
+                    <li>Use filters to find branches by status (Success, Failed)</li>
+                    <li>Click on a branch to see build details, commit messages, and history</li>
+                </ol>
+                <p><strong>3. Blocking a Branch:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Infrastructure > Odoo.sh Branches</strong></li>
+                    <li>Open the branch form</li>
+                    <li>Select a user in the <strong>"Blocked By"</strong> field</li>
+                    <li>Optionally set a <strong>"Blocked Until"</strong> date</li>
+                    <li>Save - the user will receive email notifications if the branch is updated</li>
+                </ol>
+                <p><strong>4. Managing Repository Users:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Infrastructure > Odoo.sh Repositories</strong></li>
+                    <li>Open a repository</li>
+                    <li>Go to the <strong>"Users"</strong> tab</li>
+                    <li>Add new users by clicking <strong>"Add a line"</strong> and selecting a user</li>
+                    <li>Set permissions (Admin, Developer, Tester)</li>
+                    <li>Changes are automatically synced to Odoo.sh</li>
+                </ol>
+                <p><strong>5. Viewing Employee Repository Access:</strong></p>
+                <ol style="padding-left: 20px;">
+                    <li>Go to <strong>Employees</strong> app</li>
+                    <li>Open an employee's form</li>
+                    <li>Click the <strong>"Repository Access"</strong> button (if the employee has a linked user)</li>
+                    <li>View all repositories the employee has access to</li>
+                </ol>
+            </div>
+        </details>
+    </div>
+
+    
+    <!-- Technical Details (Folded) -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 20px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Technical Details</h2>
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-code-fork" style="margin-right: 10px; color: #3b82f6;"></i> List of New Fields and Models
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>New Models:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Odoo.sh Repository</strong> (<em>Infrastructure > Odoo.sh Repositories</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Repository Name - Name of the repository</li>
+                            <li>Odoo.sh Repository ID - Internal ID from Odoo.sh</li>
+                            <li>Owner - Repository owner</li>
+                            <li>Odoo Branch - Odoo version branch</li>
+                            <li>Project Name - Project name in Odoo.sh</li>
+                            <li>Branch Count - Number of branches (computed)</li>
+                            <li>Status - Visual build status indicator (🟢/🟡/🔴/⚪/❓)</li>
+                            <li>Last Sync - Last synchronization timestamp</li>
+                            <li>Sync Status - Status message from last sync</li>
+                        </ul>
+                    </li>
+                    <li><strong>Odoo.sh Branch</strong> (<em>Infrastructure > Odoo.sh Branches</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Branch Name - Name of the branch</li>
+                            <li>Repository - Link to parent repository</li>
+                            <li>Stage - Branch stage (Production, Staging, Dev)</li>
+                            <li>Status - Visual build status indicator (🟢/🟡/🔴/⚪)</li>
+                            <li>Last Build Status - Status of last build</li>
+                            <li>Last Build Result - Result of last build</li>
+                            <li>Last Build Commit Message - Commit message from last build</li>
+                            <li>Last Build Commit Author - Author of last commit</li>
+                            <li>Last Build Date - Date of last build</li>
+                            <li>Last Pusher Name - Person who triggered the build</li>
+                            <li>Tracking Count - Number of build trackings</li>
+                            <li>Blocked By - User to notify on branch changes</li>
+                            <li>Block Date - Date when branch was blocked</li>
+                            <li>Blocked Until - Date until which branch is blocked</li>
+                            <li>Last Sync - Last synchronization timestamp</li>
+                        </ul>
+                    </li>
+                    <li><strong>Repository User</strong> (<em>Accessible via Repository form > Users tab</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Repository - Link to repository</li>
+                            <li>User - Link to Odoo user</li>
+                            <li>User Name - Name of the user (computed)</li>
+                            <li>GitHub User - GitHub username</li>
+                            <li>Permission - Access level (Admin, Developer, Tester)</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>Extended Models:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Users</strong> (<em>Settings > Users & Companies > Users</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>GitHub User - GitHub username field (visible in user form)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Employees</strong> (<em>Employees app</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Repository Access Count - Number of repositories the employee has access to (computed, visible as button)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Settings</strong> (<em>Settings > Infrastructure > Odoo.sh Monitoring</em>)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Odoo.sh Session ID - Session ID for API authentication</li>
+                            <li>Default Project ID - Default project ID for monitoring</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cogs" style="margin-right: 10px; color: #3b82f6;"></i> Added Actions and Buttons
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p><strong>Server Actions:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Synchronize all Odoo.sh Repositories</strong> (Repository list view header)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Model: Odoo.sh Repository</li>
+                            <li>Location: Infrastructure > Odoo.sh Repositories > Header button</li>
+                            <li>Functionality: Fetches all repositories, branches, and users from Odoo.sh and synchronizes the data. Removes branches and users that no longer exist in Odoo.sh. Shows a notification with sync results.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>Object Actions:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>View Repository Users</strong> (Employee form)
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Model: Employee</li>
+                            <li>Location: Employees app > Employee form > "Repository Access" button</li>
+                            <li>Functionality: Opens a filtered view of Repository Users for the employee's linked user account.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>Automatic Actions (Cron Jobs):</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>TW: Sync Odoo.sh Repositories</strong>
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Runs: Every hour</li>
+                            <li>Functionality: Automatically synchronizes all repositories, branches, and users from Odoo.sh</li>
+                        </ul>
+                    </li>
+                    <li><strong>TW: Check Blocked Until Reminders</strong>
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Runs: Daily</li>
+                            <li>Functionality: Checks branches with expired "Blocked Until" dates and sends reminder emails to the blocked user</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>Automatic Notifications:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Branch Change Notification</strong>
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Trigger: When a blocked branch receives a new build/push</li>
+                            <li>Recipient: User assigned in "Blocked By" field</li>
+                            <li>Content: Details about the change (pusher, commit message, date)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Block Reminder Notification</strong>
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            <li>Trigger: When "Blocked Until" date is reached (checked daily)</li>
+                            <li>Recipient: User assigned in "Blocked By" field</li>
+                            <li>Content: Reminder to review and update the block status</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-cubes" style="margin-right: 10px; color: #3b82f6;"></i> Module Dependencies
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <ul style="padding-left: 20px;">
+                    <li><strong>base</strong> - Odoo base module</li>
+                    <li><strong>knowledge</strong> - Knowledge app (for displaying repository information)</li>
+                    <li><strong>tw_infrastructure</strong> - Base infrastructure module (provides menu and security groups)</li>
+                    <li><strong>project</strong> - Project management module</li>
+                    <li><strong>hr</strong> - Human Resources module (for employee integration)</li>
+                    <li><strong>mail</strong> - Mail module (for email notifications)</li>
+                </ul>
+            </div>
+        </details>
+
+        <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
+                <i class="fa fa-info-circle" style="margin-right: 10px; color: #3b82f6;"></i> Licence Information
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                OPL-1
+            </div>
+        </details>
+    </div>
+
+    <!-- Version History -->
+    <div class="oe_row oe_spaced" style="padding: 5px 30px; margin-bottom: 0px; text-align: left !important;">
+        <h2 style="color: #0000FF; margin-bottom: 5px; text-align: left !important;">Version History</h2>
+        <details style="cursor: pointer; background: #ffffff; padding-left: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+            <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> 19.0.1.0.7
+            </summary>
+            <div style="margin-top: 20px; padding-left: 25px;">
+                <p>Current version - includes all features described above.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- Footer -->
+    <div class="oe_row oe_spaced" style="padding-top: 40px; border-top: 1px solid #f1f5f9; text-align: left !important;">
+        <div class="oe_span6">
+            <p style="margin-bottom: 0;">Developed by <strong>twio.tech AG</strong> | <a href="https://www.twio.tech" target="_blank" style="color: #3b82f6; text-decoration: none;">www.twio.tech</a></p>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_tw_blacklisted_repo_list" model="ir.ui.view">
+        <field name="name">tw.blacklisted.repo.list</field>
+        <field name="model">tw.github.repo.blacklist</field>
+        <field name="arch" type="xml">
+            <list string="Blacklisted Repositories">
+                <field name="name"/>
+                <field name="tw_blacklisted_repo_removed" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tw_github_repo_blacklist_form" model="ir.ui.view">
+        <field name="name">tw.github.repo.blacklist.form</field>
+        <field name="model">tw.github.repo.blacklist</field>
+        <field name="arch" type="xml">
+            <form string="Blacklisted Repository">
+                <header>
+                    <button name="action_remove_blacklisted_repo"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="tw_blacklisted_repo_removed"
+                        string="Remove Blacklisted Repo" 
+                        icon="fa-trash-o"
+                        confirm="Are you sure you want to remove all modules from this blacklisted repository? All custom data will also be deleted. This action cannot be undone!"/>
+
+                        <button name="action_remove_blacklisted_repo" 
+                        type="object" 
+                        class="btn-secondary"
+                        invisible="not tw_blacklisted_repo_removed"
+                        string="Blacklisted Repo Removed"
+                        icon="fa-check-circle"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tw_blacklisted_repo_removed" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for the blacklist list view-->
+    <record id="action_tw_github_repo_blacklist" model="ir.actions.act_window">
+        <field name="name">Blacklisted Repositories</field>
+        <field name="res_model">tw.github.repo.blacklist</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

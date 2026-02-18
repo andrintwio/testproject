@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Repository User List View -->
+    <record id="view_tw_odoo_sh_repository_user_list" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.repository.user.list</field>
+        <field name="model">tw_odoo_sh.repository.user</field>
+        <field name="arch" type="xml">
+            <list string="Repository Users" editable="bottom">
+                <field name="tw_repository_id" readonly="id != False"/>
+                <field name="tw_user_id" readonly="id != False"/>
+                <field name="tw_user_name" readonly="id != False"/>
+                <field name="tw_github_user" readonly="id != False"/>
+                <field name="tw_permission"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Repository User Search View -->
+    <record id="view_tw_odoo_sh_repository_user_search" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.repository.user.search</field>
+        <field name="model">tw_odoo_sh.repository.user</field>
+        <field name="arch" type="xml">
+            <search string="Repository Users">
+                <field name="tw_repository_id"/>
+                <field name="tw_user_id"/>
+                <field name="tw_github_user"/>
+                <field name="tw_permission"/>
+                <filter string="Admin" name="admin" domain="[('tw_permission', '=', 'admin')]"/>
+                <filter string="Developer" name="developer" domain="[('tw_permission', '=', 'developer')]"/>
+                <filter string="Tester" name="tester" domain="[('tw_permission', '=', 'tester')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Repository User Action -->
+    <record id="action_view_tw_odoo_sh_repository_user" model="ir.actions.act_window">
+        <field name="name">Repository Users</field>
+        <field name="res_model">tw_odoo_sh.repository.user</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_tw_odoo_sh_repository_user_list"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No repository users found
+            </p>
+            <p>
+                Repository users are automatically synchronized when you sync repositories.
+            </p>
+        </field>
+    </record>
+</odoo>
+

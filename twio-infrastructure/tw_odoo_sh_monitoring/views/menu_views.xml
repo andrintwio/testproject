@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action for Odoo.sh Databases (Repositories) -->
+    <record id="action_view_odoo_sh_branches_all" model="ir.actions.act_window">
+        <field name="name">Odoo.sh Branches</field>
+        <field name="res_model">tw_odoo_sh.branch</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="tw_odoo_sh_monitoring.view_tw_odoo_sh_branch_list"/>
+        <field name="context">{'group_by': 'tw_repository_id'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Get all your Odoo.sh branches summarized, and perform mass action like synchronizing.
+            </p>
+            <p>
+                Synchronize to automatically fetch Odoo.sh branches from your configured project.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu item for Odoo.sh Repositories (Admin only) -->
+    <menuitem id="menu_odoo_sh_repositories_admin"
+              name="Odoo.sh Repositories"
+              parent="tw_infrastructure.menu_infrastructure_root"
+              action="action_view_tw_odoo_sh_repository"
+              sequence="5"
+              groups="tw_infrastructure.group_infrastructure_admin"/>
+
+    <!-- Menu item for Odoo.sh Branches -->
+    <menuitem id="menu_odoo_sh_branches"
+              name="Odoo.sh Branches"
+              parent="tw_infrastructure.menu_infrastructure_root"
+              action="action_view_tw_odoo_sh_branch"
+              sequence="10"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
+</odoo>
+

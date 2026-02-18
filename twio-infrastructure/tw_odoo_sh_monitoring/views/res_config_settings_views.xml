@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_tw_odoo_sh_monitoring" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.tw_odoo_sh_monitoring</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="40"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='infrastructure']" position="inside">
+                <block title="Odoo.sh Monitoring" name="tw_odoo_sh_monitoring_config">
+                    <setting string="Odoo.sh Monitoring Configuration">
+                        <div class="text-muted">
+                            Configure your Odoo.sh monitoring settings. The session ID is used to authenticate
+                            with the Odoo.sh API, and the default project ID is used for repository monitoring.
+                        </div>
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="tw_odoo_sh_monitoring_session_id" class="col-lg-3"/>
+                                <field name="tw_odoo_sh_monitoring_session_id" password="1"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="tw_odoo_sh_monitoring_default_project" class="col-lg-3"/>
+                                <field name="tw_odoo_sh_monitoring_default_project"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

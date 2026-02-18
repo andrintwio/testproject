@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Infrastructure section to Settings -->
+    <record id="res_config_settings_view_form_inherit_tw_infrastructure" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.tw_infrastructure</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="30"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Infrastructure" string="Infrastructure" name="infrastructure" icon="fa-server" groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer">
+                    <!-- Blocks will be added by inheriting modules -->
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
