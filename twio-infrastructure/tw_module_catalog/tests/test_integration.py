@@ -6,7 +6,8 @@ _logger = logging.getLogger(__name__)
 
 class TestIntegrationSync(TestTwModuleCatalogCommon):
     
-    @patch('odoo.addons.tw_module_catalog.models.tw_github_repo.Github')
+    @patch('odoo.addons.tw_module_catalog.models.tw_github_repo.Github') # Patches Github class in tw_github_repo
+    @patch('odoo.addons.tw_module_catalog.models.tw_module_catalog.Github') # Patches Github class in tw_module_catalog
     def test_full_sync_flow(self, mock_github_class):
         """Test the full flow from repository discovery to queue processing."""
         # 1. Setup Mock GitHub Structure
