@@ -34,8 +34,6 @@ class TWGithubRepo(models.Model):
         # Define threshold for "recently synced" check (12 hours)
         sync_threshold = fields.Datetime.now() - relativedelta(hours=12)
         
-        _logger.info("CRON_START: sync_threshold=%s (type=%s)", sync_threshold, type(sync_threshold))
-
         for repo_gh_obj in syncable_gh_repos:
             _logger.info("Starting GitHub Module Catalog Sync for Repo %s...", repo_gh_obj.name)
             
