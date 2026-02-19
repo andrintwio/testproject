@@ -49,3 +49,14 @@ The module includes a scheduled action **"GitHub Module Catalog: Sync"**:
 - **Execution Interval**: Every 12 hours (default).
 - **Batch Processing**: Processes repositories in bursts of 10 to avoid GitHub API rate limits and long-running transaction timeouts.
 - **Sync Threshold**: Only re-scans repositories if they haven't been scanned in the last 12 hours or if they were never scanned.
+
+## Logic
+Discovery:
+- Scans all repos
+- Checks if repo was already scanned in the last 12 hours
+    - If not, it will fetch the repo and check for modules
+    - The Sync Queue checks if a module found by the Discoverer is already in the catalog or in the queue
+        - If model is already in catalog with matching module_sha we skip.
+        - If model is already pending and the SHA matches, we do nothing.
+        - If model is in catalog but with different sha we update the queue entry.
+        - If model is not in catalog and not in queue we add it to the queue

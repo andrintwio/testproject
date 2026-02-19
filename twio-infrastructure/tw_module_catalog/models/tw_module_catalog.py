@@ -174,13 +174,15 @@ class TWModuleCatalog(models.Model):
                         existing_module=existing
                     )
                     task.state = 'done'
-                
-                self.env.cr.commit() # Save after every single module
+                if not tools.config['test_enable']:
+                    self.env.cr.commit()
                 
             except Exception as e:
-                self.env.cr.rollback()
+                if not tools.config['test_enable']:
+                    self.env.cr.rollback()
                 task.write({'state': 'error', 'error_log': str(e)})
-                self.env.cr.commit()
+                _logger.error("Processing failed for %s: %s", task.tw_technical_name, str(e))
+                
 
         remaining_count = self.env['tw.module.sync.queue'].search_count([('state', '=', 'pending')])
         cron = self.env.ref('tw_module_catalog.ir_cron_process_sync_queue', raise_if_not_found=False)

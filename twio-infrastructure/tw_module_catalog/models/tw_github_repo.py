@@ -72,7 +72,7 @@ class TWGithubRepo(models.Model):
                     all_shas = self._get_module_shas(module_path, manifest_data['tree_map'])
 
                     # Add to queue if not already in catalog or queue
-                    self.env['tw.module.sync.queue'].add_to_queue(
+                    Queue.add_to_queue(
                         repo_name=repo_gh_obj.name,
                         tech_name=tech_name,
                         module_path=module_path,
@@ -90,7 +90,6 @@ class TWGithubRepo(models.Model):
                 # Commit changes periodically to avoid long-running transactions if not testing
                 if not tools.config['test_enable']:
                     self.env.cr.commit()
-                    self.env.invalidate_all()
 
             except Exception as e:
                 if not tools.config['test_enable']:
