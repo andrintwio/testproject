@@ -1,6 +1,8 @@
 from .common import TestTwModuleCatalogCommon
 from unittest.mock import patch, MagicMock
 import base64
+import logging
+_logger = logging.getLogger(__name__)
 
 class TestIntegrationSync(TestTwModuleCatalogCommon):
     
@@ -10,6 +12,7 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
         # 1. Setup Mock GitHub Structure
         mock_g, mock_org, mock_repo = self._mock_github_client()
         mock_github_class.return_value = mock_g
+        mock_g.get_repo.return_value = mock_repo
         
         # Mock tree with one module
         mock_tree = MagicMock()
