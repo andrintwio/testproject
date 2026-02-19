@@ -149,40 +149,40 @@ class TWModuleCatalog(models.Model):
         existing_map = {(r.tw_repo_name, r.tw_technical_name): r for r in existing_recs}
             
         for task in tasks:
-            try:
-                repo = g.get_repo(f"twio-tech/{task.tw_repo_name}")
-                shas = {
-                    'manifest_sha': task.tw_manifest_sha,
-                    'readme_sha': task.tw_readme_sha,
-                    'readme_path': task.tw_readme_path,
-                    'index_sha': task.tw_index_sha
-                }
-                
-                content = self._fetch_module_content(repo, task.tw_module_path, shas, {})
-                
-                if content:
-                    # Use pre-fetched record
-                    existing = existing_map.get((task.tw_repo_name, task.tw_technical_name), self.env['tw.module.catalog'])
+            # try:
+            repo = g.get_repo(f"twio-tech/{task.tw_repo_name}")
+            shas = {
+                'manifest_sha': task.tw_manifest_sha,
+                'readme_sha': task.tw_readme_sha,
+                'readme_path': task.tw_readme_path,
+                'index_sha': task.tw_index_sha
+            }
+            
+            content = self._fetch_module_content(repo, task.tw_module_path, shas, {})
+            
+            if content:
+                # Use pre-fetched record
+                existing = existing_map.get((task.tw_repo_name, task.tw_technical_name), self.env['tw.module.catalog'])
 
-                    self._process_found_module(
-                        repo=repo, path=task.tw_module_path, 
-                        manifest_raw=content['manifest_raw'],
-                        index_raw=content['index_raw'], 
-                        readme_html=content['readme_html'],
-                        module_sha=task.tw_module_sha, 
-                        tech_name=task.tw_technical_name, 
-                        existing_module=existing
-                    )
-                    task.state = 'done'
+                self._process_found_module(
+                    repo=repo, path=task.tw_module_path, 
+                    manifest_raw=content['manifest_raw'],
+                    index_raw=content['index_raw'], 
+                    readme_html=content['readme_html'],
+                    module_sha=task.tw_module_sha, 
+                    tech_name=task.tw_technical_name, 
+                    existing_module=existing
+                )
+                task.state = 'done'
 
-                if not tools.config['test_enable']:
-                    self.env.cr.commit()
+            if not tools.config['test_enable']:
+                self.env.cr.commit()
                 
-            except Exception as e:
-                if not tools.config['test_enable']:
-                    self.env.cr.rollback()
-                task.write({'state': 'error', 'error_log': str(e)})
-                _logger.error("Processing failed for %s: %s", task.tw_technical_name, str(e))
+            # except Exception as e:
+            #     if not tools.config['test_enable']:
+            #         self.env.cr.rollback()
+            #     task.write({'state': 'error', 'error_log': str(e)})
+            #     _logger.error("Processing failed for %s: %s", task.tw_technical_name, str(e))
                 
 
         remaining_count = self.env['tw.module.sync.queue'].search_count([('state', '=', 'pending')])
