@@ -43,7 +43,7 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
         # 3. RUN WORKER (Process Queue)
         # Mock the content fetcher to skip actual API calls inside action_process_queue_cron 
         # as it already tests _process_found_module logic
-        with patch.object(self.catalog_model, '_fetch_module_content') as mock_fetch:
+        with patch('odoo.addons.tw_module_catalog.models.tw_module_catalog.TWModuleCatalog._fetch_module_content') as mock_fetch:
             mock_fetch.return_value = {
                 'manifest_raw': manifest_content,
                 'index_raw': False,
