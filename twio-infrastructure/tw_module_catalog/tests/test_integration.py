@@ -42,6 +42,8 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
         queue_item = self.queue_model.search([('tw_repo_name', '=', 'test-repo')])
         self.assertEqual(len(queue_item), 1, "One item should be in the queue")
         self.assertEqual(queue_item.tw_technical_name, 'test_mod')
+        if queue_item.state == 'error':
+            _logger.error("QUEUE FAILED WITH: %s", queue_item.error_log)
 
         # 3. RUN WORKER (Process Queue)
         # Mock the content fetcher to skip actual API calls inside action_process_queue_cron 
