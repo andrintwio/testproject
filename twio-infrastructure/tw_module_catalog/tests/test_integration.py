@@ -8,11 +8,12 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
     
     @patch('odoo.addons.tw_module_catalog.models.tw_github_repo.Github') # Patches Github class in tw_github_repo
     @patch('odoo.addons.tw_module_catalog.models.tw_module_catalog.Github') # Patches Github class in tw_module_catalog
-    def test_full_sync_flow(self, mock_github_class):
+    def test_full_sync_flow(self, mock_github_catalog, mock_github_repo):
         """Test the full flow from repository discovery to queue processing."""
         # 1. Setup Mock GitHub Structure
         mock_g, mock_org, mock_repo = self._mock_github_client()
-        mock_github_class.return_value = mock_g
+        mock_github_catalog.return_value = mock_g
+        mock_github_repo.return_value = mock_g
         mock_g.get_repo.return_value = mock_repo
         
         # Mock tree with one module
