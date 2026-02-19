@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, tools
 from github import Github
 import ast
 import hashlib
@@ -174,6 +174,7 @@ class TWModuleCatalog(models.Model):
                         existing_module=existing
                     )
                     task.state = 'done'
+
                 if not tools.config['test_enable']:
                     self.env.cr.commit()
                 
