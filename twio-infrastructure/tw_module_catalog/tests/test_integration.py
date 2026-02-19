@@ -61,5 +61,5 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
         # 4. VERIFY FINAL CATALOG RECORD
         catalog_record = self.catalog_model.search([('tw_technical_name', '=', 'test_mod')])
         self.assertTrue(catalog_record, "Catalog record should have been created")
-        self.assertEqual(catalog_record.name, 'Test Module')
+        self.assertEqual(catalog_record.tw_name, 'Test Module')
         self.assertEqual(queue_item.state, 'done', "Queue item should be marked as done")
