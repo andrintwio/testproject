@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, tools
 import logging
 from dateutil.relativedelta import relativedelta
 import time
@@ -87,12 +87,14 @@ class TWGithubRepo(models.Model):
                     'tw_has_modules': bool(manifest_data.get('count', 0)),
                 })
 
-                # Commit changes periodically to avoid long-running transactions
-                self.env.cr.commit()
-                self.env.invalidate_all()
+                # Commit changes periodically to avoid long-running transactions if not testing
+                if not tools.config['test_enable']:
+                    self.env.cr.commit()
+                    self.env.invalidate_all()
 
             except Exception as e:
-                self.env.cr.rollback()
+                if not tools.config['test_enable']:
+                    self.env.cr.rollback()
                 _logger.error("Discovery failed for %s: %s", repo_gh_obj.name, str(e))
                 continue
        
