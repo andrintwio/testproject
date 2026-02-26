@@ -53,8 +53,10 @@ class TWGithubRepo(models.Model):
             try:
                 # Skip if no changes detected based on SHA or recent sync
                 is_up_to_date, branch = record._is_up_to_date(repo_gh_obj, sync_threshold)
-                if is_up_to_date:   
-                    _logger.info("Repo %s: No changes on %s. Skipping.", repo_gh_obj.name, branch.name)
+                if is_up_to_date:
+                    # branch is None if we skipped based on time threshold (no API call made)
+                    branch_name = branch.name if branch else (record.tw_branch or repo_gh_obj.default_branch)
+                    _logger.info("Repo %s: No changes on %s. Skipping.", repo_gh_obj.name, branch_name)
                     continue
 
                 # Fetch Tree Metadata (recursive list of all files in default branch)
