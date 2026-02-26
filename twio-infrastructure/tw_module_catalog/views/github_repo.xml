@@ -13,8 +13,8 @@
     </record>
 
     <record id="view_tw_github_repo_form" model="ir.ui.view">
-        <field name="name">tw.github.repo.blacklist.form</field>
-        <field name="model">tw.github.repo.blacklist</field>
+        <field name="name">tw.github.repo.form</field>
+        <field name="model">tw.github.repo</field>
         <field name="arch" type="xml">
             <form string="Github Repository">
                 <sheet>
