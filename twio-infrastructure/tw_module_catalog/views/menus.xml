@@ -22,4 +22,11 @@
               action="action_tw_github_repo_blacklist" 
               sequence="10"
               groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
+    
+    <menuitem id="menu_tw_module_catalog_github_repo" 
+              name="Github Repositories" 
+              parent="menu_tw_module_catalog_config" 
+              action="action_tw_github_repo" 
+              sequence="20"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
 </odoo>

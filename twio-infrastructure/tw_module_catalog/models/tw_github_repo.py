@@ -17,6 +17,7 @@ class TWGithubRepo(models.Model):
     tw_has_modules = fields.Boolean("Contains Modules")
     tw_module_count = fields.Integer(string="Module Count")
     tw_last_main_sha = fields.Char(string="Repository SHA")
+    tw_branch = fields.Char(string="Branch", default="main")
 
     def action_discovery_cron(self):
         """
@@ -51,11 +52,11 @@ class TWGithubRepo(models.Model):
                 # Skip if no changes detected based on SHA or recent sync
                 is_up_to_date, branch = record._is_up_to_date(repo_gh_obj, sync_threshold)
                 if is_up_to_date:   
-                    _logger.info("Repo %s: No changes on %s. Skipping.", repo_gh_obj.name, repo_gh_obj.default_branch)
+                    _logger.info("Repo %s: No changes on %s. Skipping.", repo_gh_obj.name, branch.name)
                     continue
 
                 # Fetch Tree Metadata (recursive list of all files in default branch)
-                manifest_data = record._get_repo_manifest_data(repo_gh_obj)
+                manifest_data = record._get_repo_manifest_data(repo_gh_obj, branch)
 
                 if not manifest_data:
                     continue
@@ -144,15 +145,17 @@ class TWGithubRepo(models.Model):
             _logger.error("Failed to connect to GitHub Organization: %s", str(e))
             return []
 
-    def _get_repo_manifest_data(self, repo_gh_obj):
+    def _get_repo_manifest_data(self, repo_gh_obj, branch_obj):
         """
         Retrieves manifest paths and file SHAs for a repository using the Git Tree API.
         Uses recursive tree fetching to minimize API calls (1 call per repository).
         """        
         _logger.info("Scanning Repo %s for Modules.", repo_gh_obj.name)
         try:
+            if not branch_obj:
+                branch_obj = self.get_branch(repo_gh_obj)
             # Fetch the entire file tree recursively (maximum performance)
-            tree = repo_gh_obj.get_git_tree(repo_gh_obj.default_branch, recursive=True)
+            tree = repo_gh_obj.get_git_tree(branch_obj.commit.sha, recursive=True)
             
             # Create a lookup map: file path -> file SHA
             tree_map = {item.path: item.sha for item in tree.tree}
@@ -216,9 +219,17 @@ class TWGithubRepo(models.Model):
                 return True, None
 
         # Skip if the latest commit SHA matches our records
-        branch = repo_gh_obj.get_branch(repo_gh_obj.default_branch)
+        branch = self.get_branch(repo_gh_obj)
         if self.tw_last_main_sha == branch.commit.sha:
             return True, branch
 
         return False, branch
+
+    def get_branch(self, repo_gh_obj):
+        
+        if self.tw_branch:
+            branch = repo_gh_obj.get_branch(self.tw_branch)
+        else:
+            branch = repo_gh_obj.get_branch(repo_gh_obj.default_branch)
+        return branch
         

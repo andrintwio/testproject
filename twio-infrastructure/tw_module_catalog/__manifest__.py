@@ -14,6 +14,7 @@
         'security/ir.model.access.csv',
         'views/module_catalog_views.xml',
         'views/github_blacklist_views.xml',
+        'views/github_repo.xml',
         'views/res_config_settings_views.xml',
         'views/menus.xml',
         'data/ir_cron.xml',
