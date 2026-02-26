@@ -64,10 +64,12 @@ class TWGithubRepo(models.Model):
                     continue
                 
                 # Identify Odoo modules by finding '__manifest__.py' files
+                found_tech_names = set()
                 for manifest_path in manifest_data.get('paths', []):
                     # Extract tech_name and path within repo
                     module_path = manifest_path.rsplit('/__manifest__.py', 1)[0] if '/' in manifest_path else ""
                     tech_name = module_path.split('/')[-1] if module_path else repo_gh_obj.name
+                    found_tech_names.add(tech_name)
                     
                     # Compute SHAs for the module's manifest, README, and index.html
                     all_shas = self._get_module_shas(module_path, manifest_data['tree_map'])
@@ -79,6 +81,15 @@ class TWGithubRepo(models.Model):
                         module_path=module_path,
                         all_shas=all_shas
                     )
+
+                # Cleanup: Remove modules that are in our catalog but no longer in the GitHub tree
+                stale_modules = Catalog.search([
+                    ('tw_repo_name', '=', repo_gh_obj.name),
+                    ('tw_technical_name', 'not in', list(found_tech_names))
+                ])
+                if stale_modules:
+                    _logger.info("Repo %s: Removing %s stale modules from catalog.", repo_gh_obj.name, len(stale_modules))
+                    stale_modules.unlink()
 
                 # Update repo state
                 record.write({
