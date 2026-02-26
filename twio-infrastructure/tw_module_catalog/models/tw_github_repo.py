@@ -19,7 +19,7 @@ class TWGithubRepo(models.Model):
     tw_has_modules = fields.Boolean("Contains Modules")
     tw_module_count = fields.Integer(string="Module Count")
     tw_last_main_sha = fields.Char(string="Repository SHA")
-    tw_branch = fields.Char(string="Branch", default="main")
+    tw_branch = fields.Char(string="Branch", help="If not set we use GitHub default branch")
 
     def action_discovery_cron(self):
         """
