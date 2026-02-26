@@ -11,6 +11,8 @@ _logger = logging.getLogger(__name__)
 class TWGithubRepo(models.Model):
     _name = 'tw.github.repo'
     _description = 'Github Repo Sync Log'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
     
     name = fields.Char(string="Repository Name", required=True)
     tw_last_sync = fields.Datetime("Last Sync Date")
