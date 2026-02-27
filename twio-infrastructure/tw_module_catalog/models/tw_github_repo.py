@@ -168,7 +168,7 @@ class TWGithubRepo(models.Model):
         _logger.info("Scanning Repo %s for Modules.", repo_gh_obj.name)
         try:
             if not branch_obj:
-                branch_obj = self.get_branch(repo_gh_obj)
+                branch_obj = self.get_production_branch(repo_gh_obj)
             # Fetch the entire file tree recursively (maximum performance)
             tree = repo_gh_obj.get_git_tree(branch_obj.commit.sha, recursive=True)
             
@@ -234,13 +234,13 @@ class TWGithubRepo(models.Model):
                 return True, None
 
         # Skip if the latest commit SHA matches our records
-        branch = self.get_branch(repo_gh_obj)
+        branch = self.get_production_branch(repo_gh_obj)
         if self.tw_last_main_sha == branch.commit.sha:
             return True, branch
 
         return False, branch
 
-    def get_branch(self, repo_gh_obj):
+    def get_production_branch(self, repo_gh_obj):
             """
             Customized branch selection:
             1. Manual override in tw_branch
