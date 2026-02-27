@@ -8,6 +8,7 @@
     'category': 'Tools, Infrastructure, GitHub',
     'depends': [
         'tw_infrastructure',
+        'tw_odoo_sh_monitoring',
         'mail',
     ],
     'data': [

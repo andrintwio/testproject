@@ -240,11 +240,38 @@ class TWGithubRepo(models.Model):
 
         return False, branch
 
-    def get_branch(self, repo_gh_obj):
-        
+def get_branch(self, repo_gh_obj):
+        """
+        Customized branch selection:
+        1. Manual override in tw_branch
+        2. Odoo.sh Production branch (if module tw_odoo_sh is installed)
+        3. GitHub Default Branch
+        """
+        # 1. Manual Override
         if self.tw_branch:
-            branch = repo_gh_obj.get_branch(self.tw_branch)
-        else:
-            branch = repo_gh_obj.get_branch(repo_gh_obj.default_branch)
-        return branch
-        
+            try:
+                return repo_gh_obj.get_branch(self.tw_branch)
+            except Exception:
+                _logger.warning("Manual branch %s not found for %s", self.tw_branch, repo_gh_obj.name)
+
+        # 2. Look up the Production branch from your Odoo.sh monitoring module
+        # We search by the repository name
+        sh_repo = self.env['tw_odoo_sh.repository'].sudo().search([
+            ('name', '=', repo_gh_obj.name)
+        ], limit=1)
+
+        if sh_repo:
+            # Find the branch record marked as 'production'
+            prod_branch_record = sh_repo.tw_branch_ids.filtered(lambda b: b.tw_stage == 'production')
+            if prod_branch_record:
+                prod_branch_name = prod_branch_record[0].name
+                try:
+                    # Sync the name back to our record for visibility
+                    if self.tw_branch != prod_branch_name:
+                        self.write({'tw_branch': prod_branch_name})
+                    return repo_gh_obj.get_branch(prod_branch_name)
+                except Exception:
+                    _logger.error("Odoo.sh Production branch %s not found on GitHub for %s", prod_branch_name, repo_gh_obj.name)
+
+        # 3. Fallback to GitHub Default
+        return repo_gh_obj.get_branch(repo_gh_obj.default_branch)
