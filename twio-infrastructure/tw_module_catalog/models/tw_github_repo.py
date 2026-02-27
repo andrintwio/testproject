@@ -39,13 +39,6 @@ class TWGithubRepo(models.Model):
         
         for repo_gh_obj in syncable_gh_repos:
             _logger.info("Starting GitHub Module Catalog Sync for Repo %s...", repo_gh_obj.name)
-            deployments = repo_gh_obj.get_deployments()
-
-            print(f"{'Environment':<20} | {'Branch/Ref':<20} | {'Created At':<20}")
-            print("-" * 65)
-
-            for d in deployments:
-                print(f"{d.environment:<20} | {d.ref:<20} | {d.created_at}")
             
             # Stop if we've exceeded the execution time limit
             if time.time() - start_time > MAX_SECONDS:
