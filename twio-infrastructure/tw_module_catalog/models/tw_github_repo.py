@@ -247,15 +247,14 @@ class TWGithubRepo(models.Model):
             2. Odoo.sh Production branch (if module tw_odoo_sh is installed)
             3. GitHub Default Branch
             """
-            # 1. Manual Override
+            # Manual Override
             if self.tw_branch:
                 try:
                     return repo_gh_obj.get_branch(self.tw_branch)
                 except Exception:
                     _logger.warning("Manual branch %s not found for %s", self.tw_branch, repo_gh_obj.name)
 
-            # 2. Look up the Production branch from your Odoo.sh monitoring module
-            # We search by the repository name
+            # Look up the Production branch from tw_odoo_sh_monitoring
             sh_repo = self.env['tw_odoo_sh.repository'].sudo().search([
                 ('name', '=', repo_gh_obj.name)
             ], limit=1)

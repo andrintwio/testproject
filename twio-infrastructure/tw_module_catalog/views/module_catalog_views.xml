@@ -7,15 +7,17 @@
             <list string="Custom Modules">
                 <field name="tw_technical_name"/>
                 <field name="tw_name"/>
+                <field name="tw_author" optional="show"/>
                 <field name="tw_category" optional="show"/>
                 <field name="tw_version" optional="show"/>
                 <field name="tw_dependency_tag_ids" optional="show" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                <field name="tw_usage_count" string="Uses" sum="Total Usage"/>
+                <field name="tw_repo_name" optional="hide"/>
+                <field name="tw_usage_count" optional="show" string="Uses" sum="Total Usage"/>
             </list>
         </field>
     </record>
 
-        <record id="view_tw_module_catalog_form" model="ir.ui.view">
+    <record id="view_tw_module_catalog_form" model="ir.ui.view">
         <field name="name">tw.module.catalog.form</field>
         <field name="model">tw.module.catalog</field>
         <field name="arch" type="xml">
@@ -103,12 +105,14 @@
                 <field name="tw_repo_name"/>
                 <separator/>
                 <filter string="Has Siblings" name="filter_has_siblings" domain="[('tw_has_siblings', '=', True)]"/>
+                <filter string="Twio Repos" name="filter_twio_repos" domain="[('tw_repo_name', 'ilike', 'twio.')]"/>
                 <filter string="My Used Modules" name="my_used" domain="[('tw_user_used_ids', 'in', [uid])]"/>
                 <filter string="Most Popular" name="popular" domain="[('tw_usage_count', '>', 0)]"/>
                 <field name="tw_author" string="Author" filter_domain="[('tw_author', 'ilike', self)]"/>
                 <separator/>
 
                 <group>
+                    <filter string="Author" name="group_by_author" context="{'group_by': 'tw_author'}"/>
                     <filter string="Repository" name="group_repo" context="{'group_by': 'tw_repo_name'}"/>
                     <filter string="Siblings" name="group_by_cluster" context="{'group_by': 'tw_cluster_label'}"/>
                 </group>
@@ -120,5 +124,6 @@
         <field name="name">Custom Modules</field>
         <field name="res_model">tw.module.catalog</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_twio_repos': 1, 'search_default_group_repo': 1}</field>
     </record>
 </odoo>

@@ -46,7 +46,7 @@ class TWModuleCatalog(models.Model):
     tw_user_used_ids = fields.Many2many('res.users', 'tw_module_usage_rel', 'module_id', 'user_id', string='Users Who Used This', readonly=True)
     tw_usage_count = fields.Integer(string='Usage Count', compute='_compute_usage_count', store=True, readonly=True)
     tw_i_have_used_this = fields.Boolean(compute='_compute_i_have_used_this', readonly=True)
-    tw_dependency_tag_ids = fields.Many2many('tw.module.dependency.tag', string='Tags')
+    tw_dependency_tag_ids = fields.Many2many('tw.module.dependency.tag', string='Dependency Tags')
     tw_cluster_label = fields.Char(
         string='Cluster Group', 
         compute='_compute_cluster_label', 

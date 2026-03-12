@@ -26,13 +26,19 @@ A technical tool designed to aggregate and analyze Odoo modules across multiple 
 
 ## Configuration
 
-1. **GitHub Token**: Go to **Settings > Technical > System Parameters** and set the key `twio.github_token` with a valid Fine-grained or Classic GitHub Personal Access Token.
+1. **GitHub Token**: Go to **Settings > Technical > System Parameters** and set the key `tw_module_catalog.github_token` with a valid Fine-grained or Classic GitHub Personal Access Token.
 2. **Organization**: The default organization is currently hardcoded to `twio-tech` in `tw_module_catalog.py`.
 3. **Blacklist**: Go to **Configuration > Repository Blacklist** to add repository names that should be ignored during sync.
 
 ## Usage
 
-- **Execution timing**: GitHub sync only runs during nighttime (00:00 - 05:00 UTC) to avoid performance impact. This check can be bypassed via the manual sync button.
+### Execution Timing (Production)
+
+To ensure the worker processes the discovery results correctly, the following execution plan is recommended:
+1. **GitHub Module Catalog: Discovery**: Set `Next Execution` to **23:00**.
+2. **GitHub Module Catalog: Queue Processor**: Set `Next Execution` to **00:00 (24:00)**.
+
+This offset ensures that discovery is fully completed before the worker starts processing the queue.
 
 ### Syncing the Catalog
 

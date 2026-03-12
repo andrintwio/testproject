@@ -1,6 +1,6 @@
 {
     'name': 'TW Module Catalog',
-    'version': '19.0.0.0.0',
+    'version': '19.0.0.0.1',
     'summary': 'GitHub-integrated Odoo module catalog with automated sync, similarity detection, and team usage tracking.',
     'license': 'OPL-1',
     'author': 'twio.tech AG',

@@ -22,6 +22,18 @@
                                 <label for="tw_odoo_sh_monitoring_default_project" class="col-lg-3"/>
                                 <field name="tw_odoo_sh_monitoring_default_project"/>
                             </div>
+                            <div class="row mt16">
+                                <label for="tw_odoo_sh_monitoring_github_username" class="col-lg-3"/>
+                                <field name="tw_odoo_sh_monitoring_github_username"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="tw_odoo_sh_monitoring_github_password" class="col-lg-3"/>
+                                <field name="tw_odoo_sh_monitoring_github_password" password="1"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="tw_odoo_sh_monitoring_responsible_user_id" class="col-lg-3"/>
+                                <field name="tw_odoo_sh_monitoring_responsible_user_id"/>
+                            </div>
                         </div>
                     </setting>
                 </block>

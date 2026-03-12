@@ -43,3 +43,7 @@ class HrEmployee(models.Model):
         return action
 
 
+class HrEmployeePublic(models.Model):
+    _inherit = 'hr.employee.public'
+
+    tw_repository_user_count = fields.Integer(string='Repository Access Count', related='employee_id.tw_repository_user_count', readonly=True)

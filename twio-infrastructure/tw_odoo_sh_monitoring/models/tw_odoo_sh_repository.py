@@ -64,11 +64,7 @@ class TwOdooShRepository(models.Model):
         _logger.info("Starting Odoo.sh databases synchronization")
         
         # Get configuration parameters
-        session_id = self.env['ir.config_parameter'].sudo().get_param('tw_odoo_sh_monitoring.session_id')
         project_id = int(self.env['ir.config_parameter'].sudo().get_param('tw_odoo_sh_monitoring.default_project') or 0)
-        
-        if not session_id:
-            raise UserError("Odoo.sh Session ID is not configured. Please set it in Settings > Databases > Odoo.sh Monitoring.")
         
         if not project_id:
             raise UserError("Odoo.sh Project ID is not configured. Please set it in Settings > Databases > Odoo.sh Monitoring.")
@@ -93,6 +89,28 @@ class TwOdooShRepository(models.Model):
             _logger.info(f"Step 2: Fetching repositories from Odoo.sh for project {project_id}...")
             repositories = self._get_repositories(project_id)
             _logger.info(f"Found {len(repositories)} repositories")
+            
+            # If no repositories found, the session may have expired — try re-login
+            if not repositories:
+                _logger.warning("No repositories found. Session may have expired. Attempting re-login...")
+                relogin_result = self._relogin_odoo_sh()
+                if relogin_result == 'device_verification':
+                    # GitHub requires device verification — cannot continue automatically
+                    self._notify_device_verification_required()
+                    # In UI context this returns a wizard; in cron context the return is ignored
+                    return {
+                        'type': 'ir.actions.act_window',
+                        'name': 'GitHub Device Verification',
+                        'res_model': 'tw_odoo_sh.github.device.verification',
+                        'view_mode': 'form',
+                        'target': 'new',
+                    }
+                elif relogin_result:
+                    _logger.info("Re-login successful, retrying repository fetch...")
+                    repositories = self._get_repositories(project_id)
+                    _logger.info(f"Found {len(repositories)} repositories after re-login")
+                else:
+                    _logger.error("Re-login failed. Cannot fetch repositories.")
             
             synced_repos = 0
             synced_branches = 0

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_tw_odoo_sh_github_device_verification_form" model="ir.ui.view">
+        <field name="name">tw_odoo_sh.github.device.verification.form</field>
+        <field name="model">tw_odoo_sh.github.device.verification</field>
+        <field name="arch" type="xml">
+            <form string="GitHub Device Verification">
+                <group>
+                    <div class="text-warning" colspan="2">
+                        <h4>
+                            <i class="fa fa-exclamation-triangle"/> GitHub Device Verification Required
+                        </h4>
+                        <p>
+                            GitHub requires a <strong>verification code</strong> from the configured
+                            authentication method (e-mail or authenticator app).
+                        </p>
+                        <p>
+                            Please enter the <strong>code</strong> below.
+                        </p>
+                        <hr/>
+                    </div>
+                    <field name="otp_code" placeholder="XXXXXX"/>
+                </group>
+                <footer>
+                    <button name="action_verify" type="object" string="Verify" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_tw_odoo_sh_github_device_verification" model="ir.actions.act_window">
+        <field name="name">GitHub Device Verification</field>
+        <field name="res_model">tw_odoo_sh.github.device.verification</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+

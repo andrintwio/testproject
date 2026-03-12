@@ -30,7 +30,7 @@
             <li><strong>Redundancy Detection:</strong> Identify similar modules across different repositories using advanced "Cluster ID" hashing.</li>
             <li><strong>Knowledge Sharing:</strong> Access documentation (Readmes and Index files) directly within Odoo without leaving the ERP.</li>
             <li><strong>Usage Tracking:</strong> See which modules are popular and which users have experience with specific tools.</li>
-            <li><strong>Automation:</strong> Keeps your catalog up-to-date automatically via scheduled GitHub synchronization.</li>
+            <li><strong>Automation:</strong> Keeps your catalog up-to-date automatically via two specialized background processes.</li>
         </ul>
     </div>
 
@@ -43,8 +43,8 @@
             <div style="margin-top: 20px; padding-left: 25px;">
                 <ol>
                     <li>Ensure the <code>tw_infrastructure</code> module is installed.</li>
-                    <li>Go to <strong>Settings > Technical > System Parameters</strong>.</li>
-                    <li>Create or update the parameter <code>twio.github_token</code> with a valid GitHub Personal Access Token.</li>
+                    <li>Go to <strong>Settings > General Settings > Infrastructure</strong>.</li>
+                    <li>Configure your <strong>GitHub Token</strong>. This token is used to authenticate with the GitHub API (requires repo access).</li>
                 </ol>
             </div>
         </details>
@@ -56,6 +56,7 @@
                 <ol>
                     <li>Navigate to <strong>Infrastructure > Configuration > Repository Blacklist</strong>.</li>
                     <li>Add the names of the repositories you want to exclude.</li>
+                    <li>Use the <strong>"Remove Blacklisted Repo"</strong> button to clean up existing entries.</li>
                 </ol>
             </div>
         </details>
@@ -66,16 +67,33 @@
                 <p><strong>Browsing Modules:</strong></p>
                 <ul>
                     <li>Go to <strong>Infrastructure > All Modules</strong>.</li>
-                    <li>Use the search bar to find modules by name, technical name, or functionality.</li>
+                    <li>Use the search bar for global search (Name, Tech Name, Summary, etc.).</li>
                     <li>Group by <strong>Siblings</strong> to see variations of the same module across different repositories.</li>
                 </ul>
                 <p><strong>Marking Usage:</strong></p>
                 <ul>
                     <li>Open a module record.</li>
-                    <li>Click the <strong>"I have used this module"</strong> button to let others know you have experience with it.</li>
+                    <li>Click <strong>"I have used this module"</strong> to track your experience and help others find experts.</li>
                 </ul>
             </div>
         </details>
+    </div>
+
+    <!-- Synchronisation (Cron Jobs) -->
+    <div class="oe_row oe_spaced" style="background-color: #fdf2f2; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important; border: 1px solid #fee2e2;">
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Automated Synchronisation</h2>
+        <p>The module maintains an up-to-date catalog using two essential background Cron jobs:</p>
+        <ul style="padding-left: 20px; list-style-type: none;">
+            <li style="margin-bottom: 15px;">
+                <strong style="color: #ef4444;"><i class="fa fa-search" style="margin-right: 8px;"></i> Discovery (Queue Filler)</strong>: 
+                <br/>Scans the GitHub organization daily to identify new repositories or changes in existing ones. It populates a synchronization queue with pending updates.
+            </li>
+            <li>
+                <strong style="color: #ef4444;"><i class="fa fa-cogs" style="margin-right: 8px;"></i> Queue Processor (Worker)</strong>: 
+                <br/>Processes pending items from the queue in efficient bursts. It fetches manifest data, READMEs, and structure to update the catalog without overloading the system.
+            </li>
+        </ul>
+        <p style="margin-top: 15px; font-style: italic; font-size: 0.9rem;">Note: Synchronization typically respects a 12-hour threshold to avoid redundant API calls.</p>
     </div>
 
     <!-- Technical Details (Folded) -->
@@ -86,32 +104,27 @@
                 <i class="fa fa-code-fork" style="margin-right: 10px; color: #3b82f6;"></i> List of New Fields and Models
             </summary>
             <div style="margin-top: 20px; padding-left: 25px;">
-                <p><strong>Custom Modules (<code>tw.module.catalog</code>)</strong>: Infrastructure > All Modules</p>
+                <p><strong>Custom Modules (<code>tw.module.catalog</code>)</strong>:</p>
                 <ul>
-                    <li><strong>Technical Name:</strong> The Odoo technical folder name.</li>
-                    <li><strong>Name:</strong> The descriptive name from the manifest.</li>
-                    <li><strong>Summary / Description:</strong> Functional and technical overviews.</li>
-                    <li><strong>Version:</strong> Current version in the matched repository.</li>
-                    <li><strong>Repository Link:</strong> Direct link to the code on GitHub.</li>
-                    <li><strong>Cluster Group:</strong> Identifies identical or highly similar modules.</li>
-                    <li><strong>Usage Count:</strong> Number of users tracking their experience with this module.</li>
-                </ul>
-                <p><strong>Repository Blacklist (<code>tw.github.repo.blacklist</code>)</strong>: Infrastructure > Configuration > Repository Blacklist</p>
-                <ul>
-                    <li><strong>Name:</strong> Repository name to exclude from synchronization.</li>
+                    <li><strong>Technical Name:</strong> Odoo technical folder name.</li>
+                    <li><strong>Name:</strong> Descriptive name from manifest.</li>
+                    <li><strong>Cluster Group:</strong> Groups identical/similar modules using 5-pillar hashing.</li>
+                    <li><strong>Usage Count:</strong> Number of users who have marked this module as used.</li>
+                    <li><strong>Repository Link:</strong> Direct link to the source code.</li>
+                    <li><strong>Readme / Description View:</strong> Rich text/HTML previews of module documentation.</li>
                 </ul>
             </div>
         </details>
 
         <details style="cursor: pointer; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px;">
             <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;">
-                <i class="fa fa-cogs" style="margin-right: 10px; color: #3b82f6;"></i> Added Actions and Buttons
+                <i class="fa fa-terminal" style="margin-right: 10px; color: #3b82f6;"></i> Added Actions and Buttons
             </summary>
             <div style="margin-top: 20px; padding-left: 25px;">
                 <ul>
-                    <li><strong>Sync GitHub Catalog:</strong> Orchestrates the synchronization with GitHub (executed via Cron or manual developer action).</li>
-                    <li><strong>I have used this module:</strong> (Custom Module Form) Mark yourself as a user/owner of this module integration.</li>
-                    <li><strong>Remove Blacklisted Repo:</strong> (Blacklist Form) Deletes all catalog entries associated with a blacklisted repository.</li>
+                    <li><strong>action_toggle_usage:</strong> ("I have used this module") Toggles the current user's experience tracking for a module.</li>
+                    <li><strong>action_discovery_cron:</strong> Manual trigger for the GitHub Discovery process.</li>
+                    <li><strong>action_process_queue_cron:</strong> Manual trigger for processing the sync queue.</li>
                 </ul>
             </div>
         </details>
@@ -123,7 +136,7 @@
             <div style="margin-top: 20px; padding-left: 25px;">
                 <ul>
                     <li><code>tw_infrastructure</code></li>
-                    <li><code>mail</code> (Chatter and Activity tracking)</li>
+                    <li><code>mail</code> (Chatter and Activities enabled)</li>
                 </ul>
             </div>
         </details>
@@ -145,7 +158,7 @@
             <summary style="font-size: 1.1rem; font-weight: 700; color: #1e293b; outline: none;"> 19.0.0.0.0
             </summary>
             <div style="margin-top: 20px; padding-left: 25px;">
-                Initial release for Odoo 19.0. GitHub synchronization and module cataloging.
+                Initial release for Odoo 19.0. Enhanced GitHub synchronization with dual-cron system and cluster-based similarity detection.
             </div>
         </details>
     </div>

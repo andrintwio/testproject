@@ -1,6 +1,6 @@
 {
     'name': 'Odoo.sh Monitoring',
-    'version': '19.0.1.0.7',
+    'version': '19.0.1.0.10',
     'category': 'Tools',
     'summary': 'Monitor Odoo.sh repositories and branches',
     'description': """
@@ -22,6 +22,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'wizard/tw_odoo_sh_github_device_verification_views.xml',
         'views/res_config_settings_views.xml',
         'views/res_users_views.xml',
         'views/hr_employee_views.xml',
