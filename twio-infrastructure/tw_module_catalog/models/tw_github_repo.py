@@ -21,7 +21,14 @@ class TWGithubRepo(models.Model):
     tw_last_main_sha = fields.Char(string="Repository SHA")
     tw_branch = fields.Char(string="Main Branch", help="If not set we use GitHub default branch")
     tw_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_id', string="Modules")
-    tw_archived_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_id', string="Archived Modules", domain=[('active', '=', False)])
+    tw_archived_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_id', string="Archived Modules", compute='_compute_archived_module_ids')
+
+    def _compute_archived_module_ids(self):
+        for rec in self:
+            rec.tw_archived_module_ids = self.env['tw.module.catalog'].with_context(active_test=False).search([
+                ('tw_repo_id', '=', rec.id),
+                ('active', '=', False)
+            ])
 
     def action_discovery_cron(self):
         """
