@@ -38,6 +38,17 @@
                                 </list>
                             </field>
                         </page>
+                        <page name="archived_modules" string="Archived Modules">
+                            <field name="tw_module_ids" widget="sol_o2m" mode="list" 
+                                   context="{'active_test': False}"
+                                   domain="[('active', '=', False)]">
+                                <list>
+                                    <field name="tw_technical_name"/>
+                                    <field name="tw_name"/>
+                                    <field name="tw_version"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>

@@ -26,6 +26,7 @@ class TWModuleCatalog(models.Model):
     tw_name = fields.Char(string='Name', required=True)
     tw_repo_id = fields.Many2one('tw.github.repo', string='Repository', index=True, readonly=True, ondelete='cascade')
     tw_version = fields.Char(string='Version', required=True, readonly=True)
+    active = fields.Boolean(default=True, string='Active')
     tw_summary = fields.Text(string='Summary', readonly=True)
     tw_depends = fields.Char(string='Dependencies', readonly=True) 
     tw_author = fields.Char(string='Author', readonly=True)

@@ -108,6 +108,8 @@
                 <filter string="Twio Repos" name="filter_twio_repos" domain="[('tw_repo_id.name', 'ilike', 'twio.')]"/>
                 <filter string="My Used Modules" name="my_used" domain="[('tw_user_used_ids', 'in', [uid])]"/>
                 <filter string="Most Popular" name="popular" domain="[('tw_usage_count', '>', 0)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <field name="tw_author" string="Author" filter_domain="[('tw_author', 'ilike', self)]"/>
                 <separator/>
 

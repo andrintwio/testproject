@@ -91,8 +91,8 @@ class TWGithubRepo(models.Model):
                     ('tw_technical_name', 'not in', list(found_tech_names))
                 ])
                 if stale_modules:
-                    _logger.info("Repo %s: Removing %s stale modules from catalog.", repo_gh_obj.name, len(stale_modules))
-                    stale_modules.unlink()
+                    _logger.info("Repo %s: Archiving %s stale modules in catalog.", repo_gh_obj.name, len(stale_modules))
+                    stale_modules.write({'active': False})
 
                 # Update repo state
                 record.write({
