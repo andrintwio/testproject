@@ -15,6 +15,8 @@ A technical tool designed to aggregate and analyze Odoo modules across multiple 
 - **Similarity Detection**: Uses a "3/5 match" heuristic on pillar hashes to group modules into "Clusters" and identify siblings.
 - **Dependency Tagging**: Automatically generates and assigns tags based on module dependencies using regex parsing.
 - **README/Description Extraction**: Converts `README.md`, `README.rst`, and `index.html` into searchable HTML content.
+- **Smart Archiving**: Automatically marks modules as inactive (`active=False`) when they are removed from GitHub repositories, preserving historical data and usage tracking.
+- **Multi-Account Support**: Seamlessly handles both GitHub Organizations and Personal User accounts for repository discovery.
 - **Usage Tracking**: Allows users to "bookmark" modules they have used, providing a popular/usage-based sorting.
 - **Blacklist Management**: Allows exclusion of specific repositories from the catalog.
 
@@ -26,8 +28,8 @@ A technical tool designed to aggregate and analyze Odoo modules across multiple 
 
 ## Configuration
 
-1. **GitHub Token**: Go to **Settings > Technical > System Parameters** and set the key `tw_module_catalog.github_token` with a valid Fine-grained or Classic GitHub Personal Access Token.
-2. **Organization**: The default organization is currently hardcoded to `twio-tech` in `tw_module_catalog.py`.
+1. **GitHub Token**: Configure via **Settings > General Settings > Infrastructure** or set the system parameter `tw_module_catalog.github_token`.
+2. **Organization/User**: Configure via **Settings > General Settings > Infrastructure** or set the system parameter `tw_module_catalog.github_org` (defaults to `twio-tech`).
 3. **Blacklist**: Go to **Configuration > Repository Blacklist** to add repository names that should be ignored during sync.
 
 ## Usage
@@ -57,8 +59,7 @@ The module includes a scheduled action **"GitHub Module Catalog: Sync"**:
 - **Sync Threshold**: Only re-scans repositories if they haven't been scanned in the last 12 hours or if they were never scanned.
 
 ## Logic
-Discovery:
-- Scans all repos
+- Scans all repos for the configured Organization or User.
 - Checks if repo was already scanned in the last 12 hours
     - If not, it will fetch the repo and check for modules
     - The Sync Queue checks if a module found by the Discoverer is already in the catalog or in the queue
@@ -66,3 +67,4 @@ Discovery:
         - If model is already pending and the SHA matches, we do nothing.
         - If model is in catalog but with different sha we update the queue entry.
         - If model is not in catalog and not in queue we add it to the queue
+- **Archive Logic**: Identifies modules that exist in Odoo but are no longer present in the GitHub repository's tree and sets them to `active = False`.

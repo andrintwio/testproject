@@ -55,7 +55,7 @@
             <div style="margin-top: 20px; padding-left: 25px;">
                 <p>If there are repositories that should not be scanned (e.g., standard Odoo, themes, or archived projects):</p>
                 <ol>
-                    <li>Navigate to <strong>Infrastructure > Repository Blacklist</strong>.</li>
+                    <li>Navigate to <strong>Infrastructure > Repo Blacklist</strong>.</li>
                     <li>Add the names of the repositories you want to exclude.</li>
                     <li>Use the <strong>"Remove Blacklisted Repo"</strong> button to clean up existing entries.</li>
                 </ol>
@@ -67,9 +67,15 @@
             <div style="margin-top: 20px; padding-left: 25px;">
                 <p><strong>Browsing Modules:</strong></p>
                 <ul>
-                    <li>Go to <strong>Infrastructure > All Modules</strong>.</li>
+                    <li>Go to <strong>Infrastructure > Catalog > Modules</strong>.</li>
                     <li>Use the search bar for global search (Name, Tech Name, Summary, etc.).</li>
                     <li>Group by <strong>Siblings</strong> to see variations of the same module across different repositories.</li>
+                </ul>
+                <p><strong>Checking Repositories & Archives:</strong></p>
+                <ul>
+                    <li>Go to <strong>Infrastructure > Catalog > Repositories</strong>.</li>
+                    <li>Open a repository to see its current modules.</li>
+                    <li>Use the <strong>"Archived Modules"</strong> tab to see modules that were previously detected but have since been removed from the repository.</li>
                 </ul>
                 <p><strong>Marking Usage:</strong></p>
                 <ul>
@@ -80,18 +86,22 @@
         </details>
     </div>
 
-    <!-- Synchronisation (Cron Jobs) -->
+    <!-- Synchronisation & Archiving -->
     <div class="oe_row oe_spaced" style="background-color: #fdf2f2; padding: 30px; border-radius: 12px; margin-bottom: 20px; text-align: left !important; border: 1px solid #fee2e2;">
-        <h2 style="color: #0000FF; margin-bottom: 20px;">Automated Synchronisation</h2>
-        <p>The module maintains an up-to-date catalog using two essential background Cron jobs:</p>
+        <h2 style="color: #0000FF; margin-bottom: 20px;">Automated Sync & Archival</h2>
+        <p>The module maintains an up-to-date catalog using two essential background Cron jobs and a robust archival system:</p>
         <ul style="padding-left: 20px; list-style-type: none;">
             <li style="margin-bottom: 15px;">
                 <strong style="color: #ef4444;"><i class="fa fa-search" style="margin-right: 8px;"></i> Discovery (Queue Filler)</strong>: 
-                <br/>Scans the GitHub organization daily to identify new repositories or changes in existing ones. It populates a synchronization queue with pending updates.
+                <br/>Scans the GitHub organization daily to identify new repositories or changes. It populates a synchronization queue with pending updates.
+            </li>
+            <li style="margin-bottom: 15px;">
+                <strong style="color: #ef4444;"><i class="fa fa-archive" style="margin-right: 8px;"></i> Smart Archiving</strong>: 
+                <br/>If a module is removed from a GitHub repository, the system <strong>automatically archives</strong> it instead of deleting it. This preserves historical relations and usage data.
             </li>
             <li>
                 <strong style="color: #ef4444;"><i class="fa fa-cogs" style="margin-right: 8px;"></i> Queue Processor (Worker)</strong>: 
-                <br/>Processes pending items from the queue in efficient bursts. It fetches manifest data, READMEs, and structure to update the catalog without overloading the system.
+                <br/>Processes pending updates in efficient bursts, fetching manifests and documentation without overloading your server.
             </li>
         </ul>
         <p style="margin-top: 15px; font-style: italic; font-size: 0.9rem;">Note: Synchronization typically respects a 12-hour threshold to avoid redundant API calls.</p>
