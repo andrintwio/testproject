@@ -39,8 +39,8 @@
                             </field>
                         </page>
                         <page name="archived_modules" string="Archived Modules">
-                            <field name="tw_archived_module_ids" widget="sol_o2m" mode="list" context="{'active_test': False}">
-                                <list>
+                            <field name="tw_archived_module_ids" mode="list" context="{'active_test': False}">
+                                <list edit="0" create="0" delete="0">
                                     <field name="tw_technical_name"/>
                                     <field name="tw_name"/>
                                     <field name="tw_version"/>
