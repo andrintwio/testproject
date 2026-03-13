@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Menuitem for the module catalog list view-->
-    <menuitem id="menu_tw_module_catalog_list" 
-              name="All Modules" 
+    <menuitem id="menu_tw_catalog" 
+              name="Catalog" 
               parent="tw_infrastructure.menu_infrastructure_root" 
-              action="action_tw_module_catalog" 
-              sequence="40"
+              sequence="10"
               groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
 
-    <!-- Menuitem for the module catalog config view-->
-    <menuitem id="menu_tw_module_catalog_config" 
-              name="Configuration" 
-              parent="tw_infrastructure.menu_infrastructure_root" 
-              sequence="50"
-              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
+    <!-- Menuitem for the module catalog list view-->
+    <menuitem id="menu_tw_module_catalog_list" 
+              name="Modules" 
+              parent="menu_tw_catalog" 
+              action="action_tw_module_catalog" 
+              sequence="10"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
+    
+    <!-- Menuitem for the github repo list view-->
+    <menuitem id="menu_tw_module_catalog_github_repo" 
+              name="Repositories" 
+              parent="menu_tw_catalog" 
+              action="action_tw_github_repo" 
+              sequence="20"
+              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_consultant,tw_infrastructure.group_infrastructure_developer"/>
 
     <!-- Menuitem for the module catalog blacklist view-->
     <menuitem id="menu_tw_module_catalog_blacklist" 
-              name="Repository Blacklist" 
-              parent="menu_tw_module_catalog_config" 
+              name="Repo Blacklist"
+              parent="tw_infrastructure.menu_infrastructure_root" 
               action="action_tw_github_repo_blacklist" 
-              sequence="10"
-              groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
-    
-    <menuitem id="menu_tw_module_catalog_github_repo" 
-              name="Github Repositories" 
-              parent="menu_tw_module_catalog_config" 
-              action="action_tw_github_repo" 
-              sequence="20"
+              sequence="60"
               groups="tw_infrastructure.group_infrastructure_admin,tw_infrastructure.group_infrastructure_developer"/>
 </odoo>
