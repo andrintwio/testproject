@@ -20,6 +20,7 @@ class TWGithubRepo(models.Model):
     tw_module_count = fields.Integer(string="Module Count")
     tw_last_main_sha = fields.Char(string="Repository SHA")
     tw_branch = fields.Char(string="Branch", help="If not set we use GitHub default branch")
+    tw_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_id', string="Modules")
 
     def action_discovery_cron(self):
         """
