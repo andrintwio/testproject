@@ -41,7 +41,7 @@ class TestIntegrationSync(TestTwModuleCatalogCommon):
         self.assertTrue(repo_record, "Repo record should have been created")
         
         # Verify item added to queue
-        queue_item = self.queue_model.search([('tw_repo_name', '=', 'test-repo')])
+        queue_item = self.queue_model.search([('tw_repo_id', '=', repo_record.id)])
         self.assertEqual(len(queue_item), 1, "One item should be in the queue")
         self.assertEqual(queue_item.tw_technical_name, 'test_mod')
         if queue_item.state == 'error':

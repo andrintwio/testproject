@@ -30,12 +30,13 @@
                     </group>
                     <notebook>
                         <page name="modules" string="Modules">
-                            <field name="tw_module_ids" widget="sol_o2m" mode="list,kanban"/>
-                            <list>
-                                <field name="tw_technical_name"/>
-                                <field name="tw_name"/>
-                                <field name="tw_version"/>
-                            </list>
+                            <field name="tw_module_ids" widget="sol_o2m" mode="list,kanban">
+                                <list>
+                                    <field name="tw_technical_name"/>
+                                    <field name="tw_name"/>
+                                    <field name="tw_version"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

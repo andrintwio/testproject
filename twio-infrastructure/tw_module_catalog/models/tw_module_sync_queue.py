@@ -4,7 +4,7 @@ class TWModuleSyncQueue(models.Model):
     _name = 'tw.module.sync.queue'
     _description = 'GitHub Sync Queue'
 
-    tw_repo_name = fields.Char(index=True)
+    tw_repo_id = fields.Many2one('tw.github.repo', index=True, ondelete='cascade')
     tw_technical_name = fields.Char(index=True)
     tw_module_path = fields.Char()
     
@@ -23,7 +23,7 @@ class TWModuleSyncQueue(models.Model):
     error_log = fields.Text()
 
     @api.model
-    def add_to_queue(self, repo_name, tech_name, module_path, all_shas):
+    def add_to_queue(self, repo_id, tech_name, module_path, all_shas):
         """Checks if module is in catalog or existing queue.
         If model is already in catalog with matching module_sha we skip.
         If model is already pending and the SHA matches, we do nothing.
@@ -33,7 +33,7 @@ class TWModuleSyncQueue(models.Model):
         module_sha = all_shas.get('module_sha')
         # Check if exact version is in catalog
         in_catalog = self.env['tw.module.catalog'].search_count([
-            ('tw_repo_name', '=', repo_name),
+            ('tw_repo_id', '=', repo_id),
             ('tw_technical_name', '=', tech_name),
             ('tw_module_sha', '=', module_sha)
         ])
@@ -42,7 +42,7 @@ class TWModuleSyncQueue(models.Model):
 
         # Check if there is already a PENDING task for this exact version
         in_queue = self.search([
-            ('tw_repo_name', '=', repo_name),
+            ('tw_repo_id', '=', repo_id),
             ('tw_technical_name', '=', tech_name),
             ('state', '=', 'pending')
         ], limit=1)
@@ -53,7 +53,7 @@ class TWModuleSyncQueue(models.Model):
 
         # Find if we have an OLD version of this module in the queue (any state)
         existing_task = self.search([
-            ('tw_repo_name', '=', repo_name),
+            ('tw_repo_id', '=', repo_id),
             ('tw_technical_name', '=', tech_name)
         ], limit=1)
 
@@ -72,7 +72,7 @@ class TWModuleSyncQueue(models.Model):
                 return False
         
         values = {
-            'tw_repo_name': repo_name,
+            'tw_repo_id': repo_id,
             'tw_technical_name': tech_name,
             'tw_module_path': module_path,
             'tw_manifest_sha': all_shas.get('manifest_sha'),

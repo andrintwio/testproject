@@ -20,7 +20,7 @@ class TWGithubRepo(models.Model):
     tw_module_count = fields.Integer(string="Module Count")
     tw_last_main_sha = fields.Char(string="Repository SHA")
     tw_branch = fields.Char(string="Branch", help="If not set we use GitHub default branch")
-    tw_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_name', string="Modules")
+    tw_module_ids = fields.One2many('tw.module.catalog', 'tw_repo_id', string="Modules")
 
     def action_discovery_cron(self):
         """
@@ -79,7 +79,7 @@ class TWGithubRepo(models.Model):
 
                     # Add to queue if not already in catalog or queue
                     Queue.add_to_queue(
-                        repo_name=repo_gh_obj.name,
+                        repo_id=record.id,
                         tech_name=tech_name,
                         module_path=module_path,
                         all_shas=all_shas
@@ -87,7 +87,7 @@ class TWGithubRepo(models.Model):
 
                 # Cleanup: Remove modules that are in our catalog but no longer in the GitHub tree
                 stale_modules = Catalog.search([
-                    ('tw_repo_name', '=', repo_gh_obj.name),
+                    ('tw_repo_id', '=', record.id),
                     ('tw_technical_name', 'not in', list(found_tech_names))
                 ])
                 if stale_modules:

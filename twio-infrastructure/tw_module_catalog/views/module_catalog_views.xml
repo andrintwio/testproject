@@ -11,7 +11,7 @@
                 <field name="tw_category" optional="show"/>
                 <field name="tw_version" optional="show"/>
                 <field name="tw_dependency_tag_ids" optional="show" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                <field name="tw_repo_name" optional="hide"/>
+                <field name="tw_repo_id" optional="hide"/>
                 <field name="tw_usage_count" optional="show" string="Uses" sum="Total Usage"/>
             </list>
         </field>
@@ -49,7 +49,7 @@
                     <group>
                         <group name="general" string="General">
                             <field name="tw_technical_name" placeholder="e.g. sales_jewelry_extension"/>
-                            <field name="tw_repo_name" placeholder="e.g. Sales Jewelry Extension"/>
+                            <field name="tw_repo_id"/>
                             <field name="tw_summary" placeholder="Module summary..."/>
                             <field name="tw_description" placeholder="Full technical description..."/>
                         </group>
@@ -68,7 +68,7 @@
                                 <field name="tw_technical_name"/>
                                 <field name="tw_name"/>
                                 <field name="tw_version"/>
-                                <field name="tw_repo_name"/>
+                                <field name="tw_repo_id"/>
                             </list>
                             </field>
                         </page>
@@ -102,10 +102,10 @@
                                    ('tw_dependency_tag_ids', 'ilike', self)]"/>
                 <separator/>
                 <field name="tw_name" string="Module" filter_domain="['|', '|', ('tw_name', 'ilike', self), ('tw_technical_name', 'ilike', self), ('tw_summary', 'ilike', self)]"/>
-                <field name="tw_repo_name"/>
+                <field name="tw_repo_id"/>
                 <separator/>
                 <filter string="Has Siblings" name="filter_has_siblings" domain="[('tw_has_siblings', '=', True)]"/>
-                <filter string="Twio Repos" name="filter_twio_repos" domain="[('tw_repo_name', 'ilike', 'twio.')]"/>
+                <filter string="Twio Repos" name="filter_twio_repos" domain="[('tw_repo_id.name', 'ilike', 'twio.')]"/>
                 <filter string="My Used Modules" name="my_used" domain="[('tw_user_used_ids', 'in', [uid])]"/>
                 <filter string="Most Popular" name="popular" domain="[('tw_usage_count', '>', 0)]"/>
                 <field name="tw_author" string="Author" filter_domain="[('tw_author', 'ilike', self)]"/>
@@ -113,7 +113,7 @@
 
                 <group>
                     <filter string="Author" name="group_by_author" context="{'group_by': 'tw_author'}"/>
-                    <filter string="Repository" name="group_repo" context="{'group_by': 'tw_repo_name'}"/>
+                    <filter string="Repository" name="group_repo" context="{'group_by': 'tw_repo_id'}"/>
                     <filter string="Siblings" name="group_by_cluster" context="{'group_by': 'tw_cluster_label'}"/>
                 </group>
             </search>

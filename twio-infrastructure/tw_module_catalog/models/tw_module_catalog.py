@@ -24,7 +24,7 @@ class TWModuleCatalog(models.Model):
     
     tw_technical_name = fields.Char(string='Technical Name', required=True, readonly=True, index=True)
     tw_name = fields.Char(string='Name', required=True)
-    tw_repo_name = fields.Char(string='Repository Name', required=True, index=True, readonly=True)
+    tw_repo_id = fields.Many2one('tw.github.repo', string='Repository', required=True, index=True, readonly=True, ondelete='cascade')
     tw_version = fields.Char(string='Version', required=True, readonly=True)
     tw_summary = fields.Text(string='Summary', readonly=True)
     tw_depends = fields.Char(string='Dependencies', readonly=True) 
@@ -156,16 +156,16 @@ class TWModuleCatalog(models.Model):
 
         # Prefetch existing modules 
         tech_names = tasks.mapped('tw_technical_name')
-        repo_names = tasks.mapped('tw_repo_name')
+        repo_ids = tasks.mapped('tw_repo_id').ids
         existing_recs = self.env['tw.module.catalog'].sudo().search([
             ('tw_technical_name', 'in', tech_names),
-            ('tw_repo_name', 'in', repo_names)
+            ('tw_repo_id', 'in', repo_ids)
         ])
-        existing_map = {(r.tw_repo_name, r.tw_technical_name): r for r in existing_recs}
+        existing_map = {(r.tw_repo_id.id, r.tw_technical_name): r for r in existing_recs}
             
         for task in tasks:
             try:
-                repo = g.get_repo(f"twio-tech/{task.tw_repo_name}")
+                repo = g.get_repo(f"twio-tech/{task.tw_repo_id.name}")
                 shas = {
                     'manifest_sha': task.tw_manifest_sha,
                     'readme_sha': task.tw_readme_sha,
@@ -177,7 +177,7 @@ class TWModuleCatalog(models.Model):
                 
                 if content:
                     # Use pre-fetched record
-                    existing = existing_map.get((task.tw_repo_name, task.tw_technical_name), self.env['tw.module.catalog'])
+                    existing = existing_map.get((task.tw_repo_id.id, task.tw_technical_name), self.env['tw.module.catalog'])
 
                     self._process_found_module(
                         repo=repo, path=task.tw_module_path, 
@@ -186,7 +186,8 @@ class TWModuleCatalog(models.Model):
                         readme_html=content['readme_html'],
                         module_sha=task.tw_module_sha, 
                         tech_name=task.tw_technical_name, 
-                        existing_module=existing
+                        existing_module=existing,
+                        repo_id=task.tw_repo_id.id
                     )
                     task.state = 'done'
 
@@ -245,7 +246,7 @@ class TWModuleCatalog(models.Model):
             _logger.error("Error fetching content for %s: %s", module_path, e)
             return False  
         
-    def _process_found_module(self, repo, path, manifest_raw, index_raw=False, readme_html=False, module_sha=None, tech_name=None, existing_module=None):
+    def _process_found_module(self, repo, path, manifest_raw, index_raw=False, readme_html=False, module_sha=None, tech_name=None, existing_module=None, repo_id=None):
         """
         Processes a single Odoo module found in a repository.
         Parses the manifest, generates hashes, identifies clusters, adds tags, 
@@ -283,7 +284,7 @@ class TWModuleCatalog(models.Model):
             vals = {
                 'tw_technical_name': tech_name,
                 'tw_name': (data.get('name') or path or tech_name).strip(),
-                'tw_repo_name': repo.name,
+                'tw_repo_id': repo_id,
                 'tw_summary': (data.get('summary') or '').strip(),
                 'tw_description': (data.get('description') or '').strip(),
                 'tw_category': (data.get('category') or '').strip(),
