@@ -31,7 +31,8 @@ class TWGithubRepo(models.Model):
         start_time = time.time()
         MAX_SECONDS = 600
         g = self._get_github_client()
-        syncable_gh_repos = self._get_syncable_gh_repos(g, 'twio-tech')
+        org_name = self.env['ir.config_parameter'].sudo().get_param('tw_module_catalog.github_org', 'twio-tech')
+        syncable_gh_repos = self._get_syncable_gh_repos(g, org_name)
         Queue = self.env['tw.module.sync.queue'].sudo()
         Catalog = self.env['tw.module.catalog'].sudo()
         
@@ -147,18 +148,24 @@ class TWGithubRepo(models.Model):
         system_defaults = ['odoo', 'enterprise', 'design-themes']
         
         try:
-            org = github_client.get_organization(org_name)
+            # Try as an organization first
+            try:
+                org_or_user = github_client.get_organization(org_name)
+            except Exception:
+                # Fallback to user if organization fails
+                org_or_user = github_client.get_user(org_name)
+                
             # Fetch all repos, sorted by most recently pushed
             syncable_gh_repos = [
-                r for r in org.get_repos(sort='pushed', direction='desc')
+                r for r in org_or_user.get_repos(sort='pushed', direction='desc')
                 if not r.fork 
                 and r.name not in exclude_list 
                 and r.name not in system_defaults
             ]
-            _logger.info("Found %s repositories to scan.", len(syncable_gh_repos))
+            _logger.info("Found %s repositories for %s to scan.", len(syncable_gh_repos), org_name)
             return syncable_gh_repos
         except Exception as e:
-            _logger.error("Failed to connect to GitHub Organization: %s", str(e))
+            _logger.error("Failed to connect to GitHub Org/User %s: %s", org_name, str(e))
             return []
 
     def _get_repo_manifest_data(self, repo_gh_obj, branch_obj):

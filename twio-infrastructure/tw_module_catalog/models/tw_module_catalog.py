@@ -163,10 +163,11 @@ class TWModuleCatalog(models.Model):
             ('tw_repo_id', 'in', repo_ids)
         ])
         existing_map = {(r.tw_repo_id.id, r.tw_technical_name): r for r in existing_recs}
+        org_name = self.env['ir.config_parameter'].sudo().get_param('tw_module_catalog.github_org', 'twio-tech')
             
         for task in tasks:
             try:
-                repo = g.get_repo(f"twio-tech/{task.tw_repo_id.name}")
+                repo = g.get_repo(f"{org_name}/{task.tw_repo_id.name}")
                 shas = {
                     'manifest_sha': task.tw_manifest_sha,
                     'readme_sha': task.tw_readme_sha,

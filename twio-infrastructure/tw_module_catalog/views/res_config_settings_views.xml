@@ -17,6 +17,10 @@
                                 <label for="tw_module_catalog_github_token" class="col-lg-3"/>
                                 <field name="tw_module_catalog_github_token" password="1"/>
                             </div>
+                            <div class="row mt16">
+                                <label for="tw_module_catalog_github_org" class="col-lg-3"/>
+                                <field name="tw_module_catalog_github_org"/>
+                            </div>
                         </div>
                     </setting>
                 </block>
