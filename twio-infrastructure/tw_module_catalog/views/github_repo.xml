@@ -39,9 +39,7 @@
                             </field>
                         </page>
                         <page name="archived_modules" string="Archived Modules">
-                            <field name="tw_module_ids" widget="sol_o2m" mode="list" 
-                                   context="{'active_test': False}"
-                                   domain="[('active', '=', False)]">
+                            <field name="tw_archived_module_ids" widget="sol_o2m" mode="list">
                                 <list>
                                     <field name="tw_technical_name"/>
                                     <field name="tw_name"/>
